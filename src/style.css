@@ -11,6 +11,8 @@
 
 /* Header fixo: o blur aparece somente depois que a página começa a rolar. */
 .header{position:fixed;top:0;left:0;right:0;width:100%;z-index:20;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;transition:background .25s ease,backdrop-filter .25s ease,box-shadow .25s ease,color .25s ease}
+.header{color:#191919}
+.hero .header,.about-hero .header,.contact-top .header{color:#fff}
 .header.scrolled{background:rgba(255,255,255,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 1px 18px #00000012;color:#191919}
 .header nav a{color:inherit;transition:color .2s ease,background .2s ease,border-color .2s ease}
 .header nav a:not(.whatsapp):hover{color:#b68d3d}
@@ -29,4 +31,9 @@
 .home-properties .card:first-child .card-image:after{opacity:0;transition:opacity .2s ease}
 .home-properties .card:hover .card-image:after{opacity:1}
 .home-properties .card h3{white-space:normal;overflow:visible;text-overflow:clip;min-height:72px}
+.card .card-body{transition:background .2s ease,color .2s ease}
+.card:hover .card-body{background:#191919;color:#fff}
+.card:hover .meta{color:#fff}
+.filters button{cursor:pointer;transition:background .2s ease,color .2s ease,transform .2s ease}
+.filters button:hover{background:#d6b66c;color:#191919;transform:translateY(-2px)}
 @media(max-width:700px){.hero-copy{left:7%;top:38%}.hero h1{font-size:36px;letter-spacing:-1.5px}.gold-top{display:block}.gold-top h2{font-size:27px}.home-properties{min-height:0;padding:38px 7% 72px}.home-properties .property-grid{display:flex;margin-top:42px;margin-right:-7%;overflow:auto}.home-properties .card{min-width:82vw}.home-properties .card-image{height:270px}.home-properties .card h3{white-space:normal}}
