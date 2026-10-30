@@ -20,4 +20,13 @@
 .about-hero{background-image:linear-gradient(90deg,rgba(16,16,16,.94),rgba(16,16,16,.55)),var(--about-image)}
 .detail-shell>.header{position:fixed;top:0;left:0;right:0;margin:0;padding:22px 8.3vw;color:#191919}
 .detail-shell{padding-top:1px}
+
+/* O card destacado é um estado de interação, não um estado inicial. */
+.home-properties .card:first-child .card-body{background:#fff;color:var(--ink);transition:background .2s ease,color .2s ease}
+.home-properties .card:first-child .meta{color:#777}
+.home-properties .card:hover .card-body{background:#191919;color:#fff}
+.home-properties .card:hover .meta{color:#fff}
+.home-properties .card:first-child .card-image:after{opacity:0;transition:opacity .2s ease}
+.home-properties .card:hover .card-image:after{opacity:1}
+.home-properties .card h3{white-space:normal;overflow:visible;text-overflow:clip;min-height:72px}
 @media(max-width:700px){.hero-copy{left:7%;top:38%}.hero h1{font-size:36px;letter-spacing:-1.5px}.gold-top{display:block}.gold-top h2{font-size:27px}.home-properties{min-height:0;padding:38px 7% 72px}.home-properties .property-grid{display:flex;margin-top:42px;margin-right:-7%;overflow:auto}.home-properties .card{min-width:82vw}.home-properties .card-image{height:270px}.home-properties .card h3{white-space:normal}}
