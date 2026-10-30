@@ -42,6 +42,7 @@
 .gallery-current{transition:opacity .18s ease}
 @keyframes gallerySlideLeft{from{opacity:.35;transform:translateX(28px)}to{opacity:1;transform:translateX(0)}}
 .gallery-current.is-sliding{animation:gallerySlideLeft .45s ease both}
+.page-motion .listing,.page-motion .listing .property-grid,.page-motion .listing .card{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
 .gallery-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:#fff;display:block;cursor:pointer}
 .gallery-dots button.active{background:#777}
 .gallery-thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
