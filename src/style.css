@@ -131,6 +131,7 @@
 .gallery-zoom-open{overflow:hidden}
 .listing .filters{display:grid;grid-template-columns:minmax(220px,1.6fr) repeat(7,minmax(105px,1fr));width:100%;max-width:none;margin-left:0;margin-right:0;justify-content:initial;align-items:center}
 .listing .filters .search-field,.listing .filters select{width:100%;min-width:0}
+.home-properties .card-image{overflow:hidden;border-radius:18px 18px 0 0}.home-properties .card-image img{border-radius:inherit}
 @media(max-width:1200px) and (min-width:701px){.listing .filters{grid-template-columns:repeat(4,minmax(0,1fr))}.listing .filters .search-field{grid-column:span 2}}
 @media(max-width:700px){.listing .filters{display:block}.listing .filters .search-field,.listing .filters select{width:100%;margin-bottom:10px}}
 footer a{transition:color .2s ease}footer a:hover{color:#191919}
