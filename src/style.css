@@ -40,8 +40,12 @@
 .gallery-column{min-width:0}
 .gallery-main{overflow:hidden;border-radius:12px}
 .gallery-current{transition:opacity .18s ease}
-@keyframes gallerySlideLeft{from{opacity:.35;transform:translateX(28px)}to{opacity:1;transform:translateX(0)}}
-.gallery-current.is-sliding{animation:gallerySlideLeft .65s cubic-bezier(.22,.61,.36,1) both;will-change:transform,opacity}
+@keyframes galleryPushOut{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+@keyframes galleryPushIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.gallery-main{overflow:hidden}
+.gallery-main .gallery-current.gallery-out,.gallery-main .gallery-current.gallery-next{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform}
+.gallery-main .gallery-current.gallery-out{animation:galleryPushOut .58s cubic-bezier(.22,.61,.36,1) both}
+.gallery-main .gallery-current.gallery-in{animation:galleryPushIn .58s cubic-bezier(.22,.61,.36,1) both}
 .filters{justify-content:flex-end}
 .search-field{position:relative;display:block;width:260px}
 .search-field input{width:100%;height:52px;border:0;border-radius:9px;background:#f3f1f1;padding:0 44px 0 18px;font:inherit;color:#191919;outline:0;transition:box-shadow .2s,background .2s}
