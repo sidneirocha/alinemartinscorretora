@@ -106,6 +106,7 @@
 .policy-content a{color:#aa8233;text-decoration:underline}
 .policy-updated{color:#888;font-size:13px;margin-top:45px!important}
 @media(max-width:700px){.detail-title{padding-top:82px;padding-bottom:22px}.gallery-main{height:250px}}
+@media(max-width:700px){.detail-info .facts{align-self:stretch;width:100%}}
 @media(max-width:700px){.footer-brand{font-size:54px;letter-spacing:-.04em}}
 .page-top:not(.policy-top){height:350px}
 .page-top:not(.policy-top) .page-title{top:200px;left:7vw;right:7vw;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(240px,.7fr);gap:70px;align-items:center}
