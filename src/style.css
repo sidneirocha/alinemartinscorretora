@@ -45,4 +45,10 @@
 .gallery-thumb{flex:0 0 72px;width:72px;height:58px;padding:0;border:2px solid transparent;border-radius:7px;overflow:hidden;background:#eee;cursor:pointer;opacity:.72;transition:opacity .2s,border-color .2s}
 .gallery-thumb:hover,.gallery-thumb.active{opacity:1;border-color:var(--gold)}
 .gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.policy-top{height:470px}
+.policy-content{max-width:900px;margin:0 auto;padding:85px 8.3vw 120px;color:#555;line-height:1.7}
+.policy-content h2{color:#191919;font-size:24px;font-weight:500;margin:38px 0 10px}
+.policy-content p{margin:0 0 18px}
+.policy-content a{color:#aa8233;text-decoration:underline}
+.policy-updated{color:#888;font-size:13px;margin-top:45px!important}
 @media(max-width:700px){.hero-copy{left:7%;top:38%}.hero h1{font-size:36px;letter-spacing:-1.5px}.gold-top{display:block}.gold-top h2{font-size:27px}.home-properties{min-height:0;padding:38px 7% 72px}.home-properties .property-grid{display:flex;margin-top:42px;margin-right:-7%;overflow:auto}.home-properties .card{min-width:82vw}.home-properties .card-image{height:270px}.home-properties .card h3{white-space:normal}}
