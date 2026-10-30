@@ -41,7 +41,13 @@
 .gallery-main{overflow:hidden;border-radius:12px}
 .gallery-current{transition:opacity .18s ease}
 @keyframes gallerySlideLeft{from{opacity:.35;transform:translateX(28px)}to{opacity:1;transform:translateX(0)}}
-.gallery-current.is-sliding{animation:gallerySlideLeft .45s ease both}
+.gallery-current.is-sliding{animation:gallerySlideLeft .65s cubic-bezier(.22,.61,.36,1) both;will-change:transform,opacity}
+.filters{justify-content:flex-end}
+.search-field{position:relative;display:block;width:260px}
+.search-field input{width:100%;height:52px;border:0;border-radius:9px;background:#f3f1f1;padding:0 44px 0 18px;font:inherit;color:#191919;outline:0;transition:box-shadow .2s,background .2s}
+.search-field input:focus{background:#fff;box-shadow:0 0 0 2px #d6b66c}
+.search-field span{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:22px;color:#777;pointer-events:none}
+.no-results{grid-column:1/-1;color:#777;padding:35px 0}
 .page-motion .listing,.page-motion .listing .property-grid,.page-motion .listing .card{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
 .gallery-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:#fff;display:block;cursor:pointer}
 .gallery-dots button.active{background:#777}
