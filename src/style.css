@@ -36,4 +36,13 @@
 .card:hover .meta{color:#fff}
 .filters button{cursor:pointer;transition:background .2s ease,color .2s ease,transform .2s ease}
 .filters button:hover{background:#d6b66c;color:#191919;transform:translateY(-2px)}
+.gallery-column{min-width:0}
+.gallery-main{overflow:hidden;border-radius:12px}
+.gallery-current{transition:opacity .18s ease}
+.gallery-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:#fff;display:block;cursor:pointer}
+.gallery-dots button.active{background:#777}
+.gallery-thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
+.gallery-thumb{flex:0 0 72px;width:72px;height:58px;padding:0;border:2px solid transparent;border-radius:7px;overflow:hidden;background:#eee;cursor:pointer;opacity:.72;transition:opacity .2s,border-color .2s}
+.gallery-thumb:hover,.gallery-thumb.active{opacity:1;border-color:var(--gold)}
+.gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block}
 @media(max-width:700px){.hero-copy{left:7%;top:38%}.hero h1{font-size:36px;letter-spacing:-1.5px}.gold-top{display:block}.gold-top h2{font-size:27px}.home-properties{min-height:0;padding:38px 7% 72px}.home-properties .property-grid{display:flex;margin-top:42px;margin-right:-7%;overflow:auto}.home-properties .card{min-width:82vw}.home-properties .card-image{height:270px}.home-properties .card h3{white-space:normal}}
