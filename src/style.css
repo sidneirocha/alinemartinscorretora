@@ -79,6 +79,16 @@
 .footer-brand{display:block}
 .footer-brand{width:100%;white-space:nowrap;font-size:clamp(96px,13vw,180px);letter-spacing:-.07em;line-height:.9}
 .developer-link{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.dark-button{position:relative;overflow:hidden;transition:background .25s,color .25s,transform .25s,box-shadow .25s}
+.dark-button::before{content:'';position:absolute;top:0;bottom:0;left:-75%;width:45%;background:linear-gradient(105deg,transparent,#ffffff55,transparent);transform:skewX(-18deg);transition:left .55s ease}
+.dark-button span{position:relative;transition:transform .25s ease;display:inline-block}
+.dark-button:hover{background:#d6b66c;color:#191919;transform:translateY(-3px);box-shadow:0 10px 24px #9d7b302e}
+.dark-button:hover::before{left:135%}
+.dark-button:hover span{transform:translateX(5px)}
+.header .whatsapp{transition:background .25s,color .25s,border-color .25s,transform .25s,box-shadow .25s}
+.header .whatsapp:hover{background:#d6b66c;color:#191919;border-color:#d6b66c;transform:translateY(-2px);box-shadow:0 8px 18px #9d7b3030}
+.filters button,.submit{transition:background .25s,color .25s,transform .25s,box-shadow .25s}
+.filters button:hover,.submit:hover{box-shadow:0 8px 18px #9d7b3030}
 .policy-top{height:470px}
 .policy-content{max-width:900px;margin:0 auto;padding:85px 8.3vw 120px;color:#555;line-height:1.7}
 .policy-content h2{color:#191919;font-size:24px;font-weight:500;margin:38px 0 10px}
