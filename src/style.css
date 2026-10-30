@@ -46,6 +46,9 @@
 .gallery-main .gallery-current.gallery-out,.gallery-main .gallery-current.gallery-next{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform}
 .gallery-main .gallery-current.gallery-out{animation:galleryPushOut .58s cubic-bezier(.22,.61,.36,1) both}
 .gallery-main .gallery-current.gallery-in{animation:galleryPushIn .58s cubic-bezier(.22,.61,.36,1) both}
+.title-word{display:inline-block;opacity:0;filter:blur(9px);transform:translateY(12px);animation:titleWordReveal .62s cubic-bezier(.22,.61,.36,1) forwards;animation-delay:calc(var(--word-index)*70ms)}
+@keyframes titleWordReveal{to{opacity:1;filter:blur(0);transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.title-word{opacity:1;filter:none;transform:none;animation:none}}
 .filters{justify-content:flex-end}
 .search-field{position:relative;display:block;width:260px}
 .search-field input{width:100%;height:52px;border:0;border-radius:9px;background:#f3f1f1;padding:0 44px 0 18px;font:inherit;color:#191919;outline:0;transition:box-shadow .2s,background .2s}
