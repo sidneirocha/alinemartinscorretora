@@ -10,7 +10,7 @@
 @media(max-width:700px){.detail-shell{padding:0 7% 50px}.detail-shell>.header{margin:0 -7%;padding:17px 7%}.detail-title{padding:38px 0 22px}.detail-title h1{font-size:26px}.detail-hero-image{height:250px;border-radius:10px}.detail-info{display:flex;flex-direction:column;gap:30px}.detail-description{font-size:14px}.facts{padding:18px}.map-row{grid-template-columns:1fr;gap:30px}.gallery-main img,.location iframe{height:250px}.related{padding-top:55px}.related h2{font-size:28px}.related>.dark-button{position:static;margin:20px 0 25px}.related .property-grid{display:flex;overflow:auto;margin-top:15px;margin-right:-7%}.related .card{min-width:78vw}.footer-brand{font-size:54px;letter-spacing:-2px;margin-bottom:35px}.instagram-card{width:130px;height:150px}.instagram-card b{font-size:16px}}
 
 /* Header fixo: o blur aparece somente depois que a página começa a rolar. */
-.header{position:fixed;top:0;left:0;right:0;width:100%;z-index:20;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;transition:background .25s ease,backdrop-filter .25s ease,box-shadow .25s ease,color .25s ease}
+.header{position:fixed;top:0;left:0;right:0;width:100%;z-index:1000;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;transition:background .25s ease,backdrop-filter .25s ease,box-shadow .25s ease,color .25s ease}
 .header{color:#191919}
 .hero .header,.about-hero .header,.contact-top .header{color:#fff}
 .header.scrolled{background:rgba(255,255,255,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 1px 18px #00000012;color:#191919}
@@ -22,6 +22,7 @@
 .about-hero{background-image:linear-gradient(90deg,rgba(16,16,16,.94),rgba(16,16,16,.55)),var(--about-image)}
 .detail-shell>.header{position:fixed;top:0;left:0;right:0;margin:0;padding:22px 8.3vw;color:#191919}
 .detail-shell{padding-top:1px}
+.page-motion .hero,.page-motion .page-top,.page-motion .about-hero,.page-motion .contact-top{animation:none}
 
 /* O card destacado é um estado de interação, não um estado inicial. */
 .home-properties .card:first-child .card-body{background:#fff;color:var(--ink);transition:background .2s ease,color .2s ease}
@@ -45,6 +46,7 @@
 .gallery-thumb{flex:0 0 72px;width:72px;height:58px;padding:0;border:2px solid transparent;border-radius:7px;overflow:hidden;background:#eee;cursor:pointer;opacity:.72;transition:opacity .2s,border-color .2s}
 .gallery-thumb:hover,.gallery-thumb.active{opacity:1;border-color:var(--gold)}
 .gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.footer-brand{display:block}
 .policy-top{height:470px}
 .policy-content{max-width:900px;margin:0 auto;padding:85px 8.3vw 120px;color:#555;line-height:1.7}
 .policy-content h2{color:#191919;font-size:24px;font-weight:500;margin:38px 0 10px}
