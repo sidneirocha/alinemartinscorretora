@@ -79,6 +79,8 @@
 .footer-brand{display:block}
 .footer-brand{width:100%;white-space:nowrap;font-size:clamp(96px,13vw,180px);letter-spacing:-.07em;line-height:.9}
 .developer-link{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.footer-bottom>.developer-link{margin-left:0}
+.footer-bottom>span:last-child .developer-link{margin-left:0!important}
 .dark-button{position:relative;overflow:hidden;transition:background .25s,color .25s,transform .25s,box-shadow .25s}
 .dark-button::before{content:'';position:absolute;top:0;bottom:0;left:-75%;width:45%;background:linear-gradient(105deg,transparent,#ffffff55,transparent);transform:skewX(-18deg);transition:left .55s ease}
 .dark-button span{position:relative;transition:transform .25s ease;display:inline-block}
