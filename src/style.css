@@ -112,7 +112,7 @@
 .page-top:not(.policy-top) .page-title p{margin:0;line-height:1.45}
 .listing{padding:38px 7vw 110px}
 @media(max-width:700px){.page-top:not(.policy-top){height:500px}.page-top:not(.policy-top) .page-title{top:180px;left:7%;right:7%;display:block}.page-top:not(.policy-top) .page-title h1{font-size:35px}.page-top:not(.policy-top) .page-title p{margin-top:20px}.listing{padding:55px 7% 80px}}
-.contact-top{min-height:100vh!important;height:auto!important;background:#171717!important;padding:180px 20px 76px!important;overflow:visible!important;font-family:'Inter Display',Inter,Arial,sans-serif}
+.contact-top{min-height:100vh!important;height:auto!important;background:linear-gradient(to bottom,#171717 0 var(--contact-split,50%),#fff var(--contact-split,50%) 100%)!important;padding:180px 20px 76px!important;overflow:visible!important;font-family:'Inter Display',Inter,Arial,sans-serif}
 .contact-wrap>h1{font-family:'Inter Display',Inter,Arial,sans-serif;font-size:66px;font-weight:600;line-height:1.2;color:#ccab5e;margin:0 0 24px}
 .contact-wrap>p{color:#f8f8f8;font-size:17px;line-height:1.35}
 .contact-wrap form{background:#f8f8f8;border:1px solid #ebebeb}
