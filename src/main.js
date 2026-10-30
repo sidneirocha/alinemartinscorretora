@@ -2,7 +2,7 @@ import './style.css';
 import catalog from '../content/properties.json';
 
 const A=`${import.meta.env.BASE_URL}assets/`;
-const route=(path)=>`${import.meta.env.BASE_URL}${path.replace(/^\/+/,'')}`;
+const route=(path)=>{const base=import.meta.env.BASE_URL;return path.startsWith(base)?path:`${base}${path.replace(/^\/+/,'')}`};
 const asset=(src)=>src?.startsWith('http')?src:`${import.meta.env.BASE_URL}${(src||'/assets/property-1.jpeg').replace(/^\/+/,'')}`;
 const properties=catalog.properties.map((p,i)=>{const lines=p.text.split('\n').map(x=>x.trim()).filter(Boolean);const title=lines[5]||decodeURIComponent(new URL(p.url).pathname.split('/').pop()).replaceAll('-',' ');const price=lines.find(x=>/R?\$?\s?\d+.*MIL/i.test(x))||'Consulte';const area=(lines.find(x=>/\d+\s?m²/.test(x))||'').match(/\d+\s?m²/)?.[0]||'';return {id:i,url:new URL(p.url).pathname,title,price,size:area,image:asset(p.images[0]?.localSrc),images:p.images,raw:p.text,lines}});
 const faqs=[
