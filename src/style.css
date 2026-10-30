@@ -64,6 +64,7 @@
 .detail-title{padding-top:112px;padding-bottom:32px}
 .home-properties .card:first-child .card-image:after{display:none!important}
 .footer-brand{display:block}
+.footer-brand{width:100%;white-space:nowrap;font-size:clamp(96px,13vw,180px);letter-spacing:-.07em;line-height:.9}
 .policy-top{height:470px}
 .policy-content{max-width:900px;margin:0 auto;padding:85px 8.3vw 120px;color:#555;line-height:1.7}
 .policy-content h2{color:#191919;font-size:24px;font-weight:500;margin:38px 0 10px}
@@ -71,4 +72,5 @@
 .policy-content a{color:#aa8233;text-decoration:underline}
 .policy-updated{color:#888;font-size:13px;margin-top:45px!important}
 @media(max-width:700px){.detail-title{padding-top:82px;padding-bottom:22px}}
+@media(max-width:700px){.footer-brand{font-size:54px;letter-spacing:-.04em}}
 @media(max-width:700px){.hero-copy{left:7%;top:38%}.hero h1{font-size:36px;letter-spacing:-1.5px}.gold-top{display:block}.gold-top h2{font-size:27px}.home-properties{min-height:0;padding:38px 7% 72px}.home-properties .property-grid{display:flex;margin-top:42px;margin-right:-7%;overflow:auto}.home-properties .card{min-width:82vw}.home-properties .card-image{height:270px}.home-properties .card h3{white-space:normal}}
