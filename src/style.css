@@ -72,6 +72,7 @@
 .home-properties .card:first-child .card-image:after{display:none!important}
 .footer-brand{display:block}
 .footer-brand{width:100%;white-space:nowrap;font-size:clamp(96px,13vw,180px);letter-spacing:-.07em;line-height:.9}
+.developer-link{color:inherit;text-decoration:underline;text-underline-offset:3px}
 .policy-top{height:470px}
 .policy-content{max-width:900px;margin:0 auto;padding:85px 8.3vw 120px;color:#555;line-height:1.7}
 .policy-content h2{color:#191919;font-size:24px;font-weight:500;margin:38px 0 10px}
