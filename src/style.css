@@ -81,6 +81,13 @@
 .developer-link{color:inherit;text-decoration:underline;text-underline-offset:3px}
 .footer-bottom>.developer-link{margin-left:0}
 .footer-bottom>span:last-child .developer-link{margin-left:0!important}
+.header .whatsapp{display:none!important}
+.whatsapp-widget{position:fixed;right:24px;bottom:24px;z-index:1100;display:flex;flex-direction:column;align-items:flex-end;gap:10px;font-family:Inter,Arial,sans-serif}
+.whatsapp-float{display:flex;align-items:center;gap:9px;border:0;border-radius:999px;padding:14px 20px;background:#d6b66c;color:#191919;font:600 14px inherit;cursor:pointer;box-shadow:0 10px 28px #0003;transition:transform .25s,background .25s,box-shadow .25s}
+.whatsapp-float span{font-size:22px;line-height:1}.whatsapp-float:hover{background:#b99342;color:#fff;transform:translateY(-4px);box-shadow:0 14px 30px #0004}
+.whatsapp-box{width:300px;padding:18px;border:1px solid #eadfca;border-radius:16px;background:#fff;box-shadow:0 16px 45px #0003;color:#191919}
+.whatsapp-box strong{display:block;font-size:16px;margin-bottom:6px}.whatsapp-box p{margin:0 0 12px;color:#777;font-size:12px;line-height:1.4}.whatsapp-box textarea{width:100%;min-height:85px;resize:vertical;border:1px solid #e4ded3;border-radius:9px;padding:10px;font:13px inherit;color:#191919;outline:0}.whatsapp-box textarea:focus{border-color:#d6b66c}.whatsapp-send{width:100%;margin-top:10px;border:0;border-radius:9px;padding:11px;background:#191919;color:#fff;font:600 13px inherit;cursor:pointer;transition:background .2s,transform .2s}.whatsapp-send:hover{background:#d6b66c;color:#191919;transform:translateY(-2px)}
+@media(max-width:700px){.whatsapp-widget{right:15px;bottom:15px}.whatsapp-box{width:min(300px,calc(100vw - 30px))}.whatsapp-float{padding:13px 16px}}
 .dark-button{position:relative;overflow:hidden;transition:background .25s,color .25s,transform .25s,box-shadow .25s}
 .dark-button::before{content:'';position:absolute;top:0;bottom:0;left:-75%;width:45%;background:linear-gradient(105deg,transparent,#ffffff55,transparent);transform:skewX(-18deg);transition:left .55s ease}
 .dark-button span{position:relative;transition:transform .25s ease;display:inline-block}
