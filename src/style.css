@@ -63,6 +63,7 @@
 .filters{flex-wrap:wrap;align-items:center;gap:10px}
 .filters{max-width:1115px;margin-left:auto;margin-right:auto;padding:10px;border:1px solid #eee8df;border-radius:14px;background:#faf9f6;justify-content:flex-end}
 .filters select{min-width:145px;cursor:pointer;height:50px}
+.filters .filter-city,.filters .filter-purpose,.filters .filter-type{min-width:145px}
 .filters .search-field{flex:1;min-width:230px}
 .submit{background:#d6b66c;color:#191919;font-weight:600;cursor:pointer;transition:background .2s,color .2s,transform .2s}
 .submit:hover{background:#b99342;color:#fff;transform:translateY(-2px)}
