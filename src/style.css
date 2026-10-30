@@ -107,6 +107,17 @@
 .policy-updated{color:#888;font-size:13px;margin-top:45px!important}
 @media(max-width:700px){.detail-title{padding-top:82px;padding-bottom:22px}.gallery-main{height:250px}}
 @media(max-width:700px){.detail-info .facts{align-self:stretch;width:100%}}
+@media(max-width:700px){
+  html,body{overflow-x:hidden}
+  .listing{padding:42px 7% 72px}
+  .listing .filters{margin-bottom:42px;padding:12px;border-radius:14px}
+  .listing .property-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:24px;margin-right:0}
+  .listing .card{width:100%;min-width:0}
+  .listing .card-image{height:260px}
+  .listing .card h3{min-height:auto;margin-bottom:16px}
+  .listing .card-body{padding:18px 20px 20px}
+  .listing .meta{justify-content:space-between}
+}
 @media(max-width:700px){.footer-brand{font-size:54px;letter-spacing:-.04em}}
 .page-top:not(.policy-top){height:350px}
 .page-top:not(.policy-top) .page-title{top:200px;left:7vw;right:7vw;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(240px,.7fr);gap:70px;align-items:center}
