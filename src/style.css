@@ -126,6 +126,7 @@
 .gallery-lightbox img{display:block;max-width:min(94vw,1400px);max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:10px;box-shadow:0 20px 70px #0008;cursor:default}
 .gallery-lightbox-close{position:absolute;top:22px;right:28px;width:44px;height:44px;border:0;border-radius:50%;background:#fff;color:#191919;font-size:30px;line-height:1;cursor:pointer;transition:transform .2s,background .2s}
 .gallery-lightbox-close:hover{background:#d6b66c;transform:rotate(90deg)}
+.gallery-lightbox-arrow{position:absolute;top:50%;z-index:1;width:48px;height:48px;border:0;border-radius:50%;background:#fff;color:#191919;font-size:34px;line-height:1;cursor:pointer;transform:translateY(-50%);transition:background .2s,color .2s,transform .2s}.gallery-lightbox-arrow.prev{left:24px}.gallery-lightbox-arrow.next{right:24px}.gallery-lightbox-arrow:hover{background:#d6b66c;transform:translateY(-50%) scale(1.08)}
 .gallery-zoom-open{overflow:hidden}
 footer a{transition:color .2s ease}footer a:hover{color:#191919}
 .hero{overflow:hidden;background:linear-gradient(90deg,rgba(12,8,5,.72),transparent 62%);isolation:isolate}
