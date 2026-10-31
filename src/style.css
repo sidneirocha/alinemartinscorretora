@@ -62,6 +62,12 @@
 .search-field span{position:absolute;right:44px;top:50%;transform:translateY(-50%);font-size:22px;color:#777;pointer-events:none}
 .search-field .filter-clear{position:absolute;right:8px;top:50%;display:block;width:28px;min-width:0!important;height:28px;padding:0;border:0;border-radius:50%;background:transparent;color:#777;font-size:20px;line-height:1;transform:translateY(-50%);cursor:pointer}
 .search-field .filter-clear:hover{background:#e5dfd3;color:#191919}
+.search-suggestions{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:20;display:grid;gap:2px;padding:6px;border:1px solid #e1d8c8;border-radius:12px;background:#fff;box-shadow:0 14px 30px #0002}
+.search-suggestions[hidden]{display:none}
+.filters .search-suggestion{display:grid;gap:3px;width:100%;padding:10px 12px;border:0;border-radius:8px;background:#fff;color:#191919;text-align:left;font:inherit;cursor:pointer}
+.search-suggestion:hover,.search-suggestion:focus-visible{background:#f6f0e2;outline:none}
+.search-suggestion strong{overflow:hidden;color:#191919;font-size:13px;text-overflow:ellipsis;white-space:nowrap}
+.search-suggestion span,.search-empty{color:#777;font-size:12px}
 .filters{flex-wrap:wrap;align-items:center;gap:10px}
 .filters{max-width:1115px;margin-left:auto;margin-right:auto;padding:10px;border:1px solid #eee8df;border-radius:14px;background:#faf9f6;justify-content:flex-end}
 .filters select{min-width:145px;cursor:pointer;height:50px}
