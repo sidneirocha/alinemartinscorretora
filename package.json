@@ -3,6 +3,15 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "scripts": { "dev": "vite", "build": "vite build && node scripts/copy-404.mjs", "preview": "vite preview" },
-  "devDependencies": { "vite": "^6.1.0" }
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/copy-404.mjs",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.1.0"
+  },
+  "dependencies": {
+    "lucide": "^0.468.0"
+  }
 }

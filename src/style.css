@@ -146,6 +146,9 @@
 .listing .filters{display:grid;grid-template-columns:minmax(205px,1.8fr) repeat(3,minmax(115px,1.1fr)) repeat(4,minmax(95px,1fr));width:100%;max-width:none;margin-left:0;margin-right:0;justify-content:initial;align-items:center}
 .listing .filters .search-field,.listing .filters select{width:100%;min-width:0}
 .listing .filters select{padding-inline:10px;font-size:14px}
+.filter-control{position:relative;display:block;min-width:0}
+.filter-control svg{position:absolute;left:12px;top:50%;z-index:1;width:16px;height:16px;color:#9a793d;pointer-events:none;transform:translateY(-50%)}
+.filter-control select{padding-left:36px!important}
 .home-properties .card-image{overflow:hidden;border-radius:18px 18px 0 0}.home-properties .card-image img{border-radius:inherit}
 @media(max-width:1200px) and (min-width:701px){.listing .filters{grid-template-columns:repeat(4,minmax(0,1fr))}.listing .filters .search-field{grid-column:span 2}}
 @media(max-width:700px){.listing .filters{display:block}.listing .filters .search-field,.listing .filters select{width:100%;margin-bottom:10px}}
@@ -163,7 +166,10 @@ footer a{transition:color .2s ease}footer a:hover{color:#191919}
 .card:hover .card-body,.home-properties .card:hover .card-body{background:#191919;color:#fff}
 .filters-more-toggle{height:50px!important;min-width:128px!important;padding-inline:14px!important;background:#fff!important;color:#191919!important;border:1px solid #d8d1c4!important}
 .filters-more-toggle[aria-expanded="true"]{background:#191919!important;color:#fff!important;border-color:#191919!important}
+.filters-more-toggle{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.filters-more-toggle svg{width:16px;height:16px}
 .listing .filters:has(.filters-more){grid-template-columns:minmax(240px,2fr) repeat(3,minmax(120px,1fr))}
 .filters-more{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding-top:2px}
 .filters-more[hidden]{display:none}
 @media(max-width:1200px) and (min-width:701px){.filters-more{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:700px){.filter-control{width:100%;margin-bottom:10px}.filters-more{grid-template-columns:1fr 1fr;gap:10px}.filters-more .filter-control{margin-bottom:0}.filters-more-toggle{width:100%!important;margin-bottom:10px}}
