@@ -161,3 +161,9 @@ footer a{transition:color .2s ease}footer a:hover{color:#191919}
 .card,.card-body{transition:background-color .2s ease,color .2s ease}
 .card:hover{transform:none;box-shadow:none;background:#191919;color:#fff}
 .card:hover .card-body,.home-properties .card:hover .card-body{background:#191919;color:#fff}
+.filters-more-toggle{height:50px!important;min-width:128px!important;padding-inline:14px!important;background:#fff!important;color:#191919!important;border:1px solid #d8d1c4!important}
+.filters-more-toggle[aria-expanded="true"]{background:#191919!important;color:#fff!important;border-color:#191919!important}
+.listing .filters:has(.filters-more){grid-template-columns:minmax(240px,2fr) repeat(3,minmax(120px,1fr))}
+.filters-more{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding-top:2px}
+.filters-more[hidden]{display:none}
+@media(max-width:1200px) and (min-width:701px){.filters-more{grid-template-columns:repeat(4,minmax(0,1fr))}}
