@@ -152,5 +152,5 @@ footer a{transition:color .2s ease}footer a:hover{color:#191919}
 .hero{overflow:hidden;background:linear-gradient(90deg,rgba(12,8,5,.72),transparent 62%);isolation:isolate}
 .hero::before{content:'';position:absolute;inset:-3%;z-index:0;background:url('/assets/hero.webp') center/cover;transform:translate3d(calc(var(--hero-x,0) * -18px),calc(var(--hero-y,0) * -12px),0) scale(1.04);transition:transform .45s cubic-bezier(.22,.61,.36,1);will-change:transform}
 .hero::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at calc(50% + var(--hero-x,0) * 180px) calc(50% + var(--hero-y,0) * 150px),rgba(255,225,157,.22),transparent 19%),radial-gradient(circle at calc(52% + var(--hero-x,0) * -120px) calc(48% + var(--hero-y,0) * -100px),rgba(255,255,255,.1),transparent 28%);mix-blend-mode:screen;filter:blur(18px);transition:background-position .45s ease;will-change:filter}
-.hero> .hero-copy,.hero> .header{z-index:2}
+.hero> .hero-copy{z-index:2}.hero> .header{z-index:1000}
 @media(max-width:700px){.hero::before{background-position:right center}}
