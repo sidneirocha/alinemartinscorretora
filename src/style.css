@@ -156,3 +156,8 @@ footer a{transition:color .2s ease}footer a:hover{color:#191919}
 .hero::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at calc(50% + var(--hero-x,0) * 180px) calc(50% + var(--hero-y,0) * 150px),rgba(255,225,157,.22),transparent 19%),radial-gradient(circle at calc(52% + var(--hero-x,0) * -120px) calc(48% + var(--hero-y,0) * -100px),rgba(255,255,255,.1),transparent 28%);mix-blend-mode:screen;filter:blur(18px);transition:background-position .45s ease;will-change:filter}
 .hero> .hero-copy{z-index:2}.hero> .header{z-index:1000}
 @media(max-width:700px){.hero::before{background-position:right center}}
+
+/* O hover do card altera apenas a cor, sem deslocar ou criar uma camada visual. */
+.card,.card-body{transition:background-color .2s ease,color .2s ease}
+.card:hover{transform:none;box-shadow:none;background:#191919;color:#fff}
+.card:hover .card-body,.home-properties .card:hover .card-body{background:#191919;color:#fff}
