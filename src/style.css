@@ -108,7 +108,8 @@
 @media(max-width:700px){.detail-title{padding-top:82px;padding-bottom:22px}.gallery-main{height:250px}}
 @media(max-width:700px){.detail-info .facts{align-self:stretch;width:100%}}
 @media(max-width:700px){
-  html,body{overflow-x:hidden}
+  html,body{height:auto;min-height:100%;overflow-x:hidden!important;overflow-y:auto!important;touch-action:pan-y}
+  main,footer,.hero,.page-top,.detail-page,.detail-shell{touch-action:pan-y}
   .listing{padding:42px 7% 72px}
   .listing .filters{margin-bottom:42px;padding:12px;border-radius:14px}
   .listing .property-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:24px;margin-right:0}
