@@ -65,9 +65,12 @@
 .search-suggestions{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:20;display:grid;gap:2px;padding:6px;border:1px solid #e1d8c8;border-radius:12px;background:#fff;box-shadow:0 14px 30px #0002}
 .search-suggestions[hidden]{display:none}
 .filters .search-suggestion{display:grid;gap:3px;width:100%;padding:10px 12px;border:0;border-radius:8px;background:#fff;color:#191919;text-align:left;font:inherit;cursor:pointer}
+.filters .search-suggestion{height:auto!important;min-height:52px;overflow:hidden;white-space:normal}
 .search-suggestion:hover,.search-suggestion:focus-visible{background:#f6f0e2;outline:none}
-.search-suggestion strong{overflow:hidden;color:#191919;font-size:13px;text-overflow:ellipsis;white-space:nowrap}
+.search-suggestion strong{display:block;overflow:hidden;color:#191919;font-size:13px;line-height:1.25;text-overflow:ellipsis;white-space:nowrap}
 .search-suggestion span,.search-empty{color:#777;font-size:12px}
+.filters .search-suggestion span{position:static;display:block;overflow:hidden;transform:none;white-space:nowrap;text-overflow:ellipsis}
+.listing .card h3,.home-properties .card h3{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;min-height:3.9em}
 .filters{flex-wrap:wrap;align-items:center;gap:10px}
 .filters{max-width:1115px;margin-left:auto;margin-right:auto;padding:10px;border:1px solid #eee8df;border-radius:14px;background:#faf9f6;justify-content:flex-end}
 .filters select{min-width:145px;cursor:pointer;height:50px}
