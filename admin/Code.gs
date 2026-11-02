@@ -15,8 +15,8 @@ function doGet(e) {
   try {
     const action = (e && e.parameter && e.parameter.action) || 'list';
     if (action === 'public') return response_({ ok: true, properties: list_() }, e);
-    authorize_();
-    if (action === 'list') return response_({ ok: true, properties: list_() }, e);
+    const authorizedEmail = authorize_();
+    if (action === 'list') return response_({ ok: true, email: authorizedEmail, properties: list_() }, e);
     return response_({ ok: false, error: 'Ação GET inválida.' }, e);
   } catch (error) {
     return response_({ ok: false, error: error.message }, e);
@@ -43,6 +43,7 @@ function authorize_() {
   const allowed = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '';
   const emails = allowed.split(',').map(item => item.trim().toLowerCase()).filter(Boolean);
   if (!email || !emails.includes(email)) throw new Error('Conta Google não autorizada.');
+  return email;
 }
 
 function sheet_() {
