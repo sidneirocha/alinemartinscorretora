@@ -107,8 +107,11 @@ function authorize_(adminToken) {
   const configured = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '';
   const emails = [...new Set(DEFAULT_ADMIN_EMAILS.concat(configured.split(',')))].map(item => item.trim().toLowerCase()).filter(Boolean);
   if (adminToken) {
-    const tokenEmail = CacheService.getScriptCache().get(`admin-token-${adminToken}`);
-    if (tokenEmail && emails.includes(tokenEmail)) return tokenEmail;
+    const tokenRecord = PropertiesService.getScriptProperties().getProperty(`admin-token-${adminToken}`);
+    if (tokenRecord) {
+      const parsed = JSON.parse(tokenRecord);
+      if (parsed.expiresAt > Date.now() && emails.includes(parsed.email)) return parsed.email;
+    }
   }
   const authorizedEmail = String(activeEmail || '').trim().toLowerCase();
   if (!authorizedEmail || !emails.includes(authorizedEmail)) throw new Error('Conta Google não autorizada.');
@@ -117,7 +120,7 @@ function authorize_(adminToken) {
 
 function issueAdminToken_(email) {
   const token = Utilities.getUuid();
-  CacheService.getScriptCache().put(`admin-token-${token}`, String(email || '').trim().toLowerCase(), 3600);
+  PropertiesService.getScriptProperties().setProperty(`admin-token-${token}`, JSON.stringify({ email: String(email || '').trim().toLowerCase(), expiresAt: Date.now() + 3600000 }));
   return token;
 }
 
