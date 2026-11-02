@@ -30,6 +30,7 @@ function doPost(e) {
     if (payload.action === 'update') return json_({ ok: true, property: update_(payload.property) });
     if (payload.action === 'create') return json_({ ok: true, property: create_(payload.property) });
     if (payload.action === 'uploadPhoto') return json_({ ok: true, photo: uploadPhoto_(payload) });
+    if (payload.action === 'deletePhoto') return json_({ ok: true, deleted: deletePhoto_(payload) });
     if (payload.action === 'status') return json_({ ok: true, property: setStatus_(payload.id, payload.status) });
     if (payload.action === 'delete') return json_({ ok: true, deleted: delete_(payload.id) });
     return json_({ ok: false, error: 'Ação POST inválida.' });
@@ -65,7 +66,7 @@ function list_() {
     const url = row[4] || row[5];
     if (!propertyId || !url) return;
     if (!photosByProperty[propertyId]) photosByProperty[propertyId] = [];
-    photosByProperty[propertyId].push({ localSrc: url, url: url, order: Number(row[2]) || 0 });
+    photosByProperty[propertyId].push({ id: extractDriveId_(url), localSrc: url, url: url, order: Number(row[2]) || 0 });
   });
 
   return properties.map(property => ({
@@ -165,6 +166,39 @@ function uploadPhoto_(payload) {
   const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(PHOTO_SHEET_NAME);
   if (sheet) sheet.appendRow([payload.propertyId, payload.title || '', Number(payload.order) || sheet.getLastRow(), 'Galeria de imóvel', url, url, '', '', '', 'Enviada pelo painel administrativo']);
   return { id: file.getId(), url: url, name: file.getName() };
+}
+
+function deletePhoto_(payload) {
+  if (!payload.propertyId || (!payload.photoId && !payload.photoUrl)) {
+    throw new Error('Imóvel e imagem são obrigatórios.');
+  }
+
+  const fileId = payload.photoId || extractDriveId_(payload.photoUrl);
+  if (fileId) {
+    try {
+      DriveApp.getFileById(fileId).setTrashed(true);
+    } catch (error) {
+      // O arquivo pode já ter sido removido do Drive; a linha ainda deve ser limpa.
+    }
+  }
+
+  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(PHOTO_SHEET_NAME);
+  if (!sheet || sheet.getLastRow() < 2) return payload.photoUrl || fileId;
+
+  const rows = sheet.getDataRange().getDisplayValues();
+  for (let index = rows.length - 1; index >= 1; index -= 1) {
+    const row = rows[index];
+    const sameProperty = row[0] === payload.propertyId;
+    const samePhoto = payload.photoUrl ? row[4] === payload.photoUrl || row[5] === payload.photoUrl : true;
+    if (sameProperty && samePhoto) sheet.deleteRow(index + 1);
+  }
+
+  return payload.photoUrl || fileId;
+}
+
+function extractDriveId_(url) {
+  const match = String(url || '').match(/[?&]id=([^&]+)/);
+  return match ? match[1] : '';
 }
 
 function json_(data) {
