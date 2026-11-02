@@ -8,9 +8,8 @@ const PHOTO_FOLDER_ID = '1fRDgyNIGAqQwj1rkJfXp0PPvWXmaEMq6';
 const SHEET_NAME = 'IMÓVEIS';
 const PHOTO_SHEET_NAME = 'FOTOS';
 const HEADERS = ['ID', 'Título', 'Operação', 'Preço (texto do site)', 'Endereço / localização exibida', 'Área', 'Quartos', 'Banheiros', 'Andares (campo do site)', 'Condomínio', 'IPTU', 'Características e resumo da descrição'];
-// A planilha possui URL e uma coluna numérica de fotos antes do Status.
-// O Status fica na coluna seguinte para não sobrescrever dados existentes.
-const ALL_HEADERS = HEADERS.concat(['URL', 'Fotos', 'Status']);
+// Estrutura real da aba IMÓVEIS.
+const ALL_HEADERS = HEADERS.concat(['URL', 'Fotos', 'Status CMS', 'Destaque', 'Slug', 'Atualizado em']);
 
 function doGet(e) {
   try {
@@ -49,18 +48,6 @@ function sheet_() {
   const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
   if (!sheet) throw new Error('A aba IMÓVEIS não foi encontrada.');
 
-  // Corrige a implantação anterior, que havia identificado a coluna Fotos como Status.
-  const fotosColumn = HEADERS.length + 2;
-  const fotosHeader = sheet.getRange(1, fotosColumn).getDisplayValue();
-  if (fotosHeader === 'Status' && sheet.getLastRow() > 1) {
-    const sample = sheet.getRange(2, fotosColumn, Math.min(sheet.getLastRow() - 1, 20), 1).getDisplayValues().flat();
-    const validStatuses = ['Ativo', 'Vendido', 'Alugado', 'Desativado'];
-    if (sample.some(value => value && !validStatuses.includes(value))) {
-      sheet.getRange(1, fotosColumn).setValue('Fotos');
-    }
-  }
-
-  if (sheet.getRange(1, ALL_HEADERS.length).getDisplayValue() !== 'Status') sheet.getRange(1, ALL_HEADERS.length).setValue('Status');
   return sheet;
 }
 
@@ -70,10 +57,17 @@ function list_() {
 }
 
 function rowToProperty_(row) {
-  return ALL_HEADERS.reduce((property, header, index) => {
-    property[header] = row[index] || '';
-    return property;
+  const property = ALL_HEADERS.reduce((result, header, index) => {
+    result[header] = row[index] || '';
+    return result;
   }, {});
+
+  // O painel usa "Status", mas a coluna da planilha se chama "Status CMS".
+  property.Status = property['Status CMS'] === 'Publicado'
+    ? 'Ativo'
+    : (property['Status CMS'] || 'Ativo');
+
+  return property;
 }
 
 function validate_(property) {
@@ -93,18 +87,29 @@ function update_(property) {
   validate_(property);
   const sheet = sheet_();
   const row = findRow_(property.ID);
-  sheet.getRange(row, 1, 1, ALL_HEADERS.length).setValues([ALL_HEADERS.map(header => property[header] || (header === 'Status' ? 'Ativo' : ''))]);
+  const values = ALL_HEADERS.map(header => {
+    if (header === 'Status CMS') {
+      return property.Status === 'Ativo'
+        ? 'Publicado'
+        : (property.Status || property['Status CMS'] || 'Publicado');
+    }
+    return property[header] || '';
+  });
+  sheet.getRange(row, 1, 1, ALL_HEADERS.length).setValues([values]);
   return rowToProperty_(sheet.getRange(row, 1, 1, ALL_HEADERS.length).getDisplayValues()[0]);
 }
 
 function create_(property) {
   validate_(property);
   const sheet = sheet_();
-  if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
+  if (sheet.getLastRow() === 0) sheet.appendRow(ALL_HEADERS);
   if (sheet.getRange(2, 1, Math.max(sheet.getLastRow() - 1, 1), 1).getDisplayValues().flat().includes(property.ID)) {
     throw new Error('Já existe um imóvel com este ID.');
   }
-  sheet.appendRow(ALL_HEADERS.map(header => property[header] || (header === 'Status' ? 'Ativo' : '')));
+  sheet.appendRow(ALL_HEADERS.map(header => {
+    if (header === 'Status CMS') return property.Status === 'Ativo' ? 'Publicado' : (property.Status || 'Publicado');
+    return property[header] || '';
+  }));
   return property;
 }
 
@@ -113,7 +118,7 @@ function setStatus_(id, status) {
   if (!allowed.includes(status)) throw new Error('Status inválido.');
   const sheet = sheet_();
   const row = findRow_(id);
-  sheet.getRange(row, ALL_HEADERS.indexOf('Status') + 1).setValue(status);
+  sheet.getRange(row, ALL_HEADERS.indexOf('Status CMS') + 1).setValue(status === 'Ativo' ? 'Publicado' : status);
   return rowToProperty_(sheet.getRange(row, 1, 1, ALL_HEADERS.length).getDisplayValues()[0]);
 }
 
