@@ -42,7 +42,7 @@ function authPage_(e) {
     ? requested
     : 'https://sidneirocha.github.io/alinemartinscorretora/admin';
   const destination = `${returnUrl}${returnUrl.includes('?') ? '&' : '?'}adminAuth=1`;
-  return HtmlService.createHtmlOutput(`<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{margin:0;padding:24px;font:16px Arial,sans-serif;color:#191919;background:#f7f4ed}p{max-width:32rem;margin:20vh auto;text-align:center}</style></head><body><p>Autenticação concluída. Retornando ao painel…</p><script>location.replace(${JSON.stringify(destination)})</script></body></html>`);
+  return HtmlService.createHtmlOutput(`<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{margin:0;padding:24px;font:16px Arial,sans-serif;color:#191919;background:#f7f4ed}p{max-width:32rem;margin:20vh auto;text-align:center}</style></head><body><p>Autenticação concluída. Retornando ao painel…</p><script>window.top.location.replace(${JSON.stringify(destination)})</script></body></html>`);
 }
 
 function doPost(e) {
