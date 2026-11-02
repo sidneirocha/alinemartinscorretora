@@ -73,7 +73,8 @@ function list_() {
     if (!propertyId || !url || !photoId) return;
     if (!photosByProperty[propertyId]) photosByProperty[propertyId] = [];
     const stableUrl = `https://drive.google.com/thumbnail?id=${photoId}&sz=w1600`;
-    photosByProperty[propertyId].push({ id: photoId, localSrc: stableUrl, url: stableUrl, order: Number(row[2]) || 0 });
+    const fallbackUrl = `https://drive.google.com/uc?export=view&id=${photoId}`;
+    photosByProperty[propertyId].push({ id: photoId, localSrc: stableUrl, url: stableUrl, fallback: fallbackUrl, order: Number(row[2]) || 0 });
   });
 
   return properties.map(property => ({
