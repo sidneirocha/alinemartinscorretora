@@ -4,6 +4,7 @@
  * Configure ADMIN_EMAILS nas propriedades do script, separados por vírgula.
  */
 const SPREADSHEET_ID = 'bhVc-cYfQik1PRGPrAMhtRZDu3U';
+const PHOTO_FOLDER_ID = '1fRDgyNIGAqQwj1rkJfXp0PPvWXmaEMq6';
 const SHEET_NAME = 'IMÓVEIS';
 const PHOTO_SHEET_NAME = 'FOTOS';
 const HEADERS = ['ID', 'Título', 'Operação', 'Preço (texto do site)', 'Endereço / localização exibida', 'Área', 'Quartos', 'Banheiros', 'Andares (campo do site)', 'Condomínio', 'IPTU', 'Características e resumo da descrição'];
@@ -112,7 +113,7 @@ function delete_(id) {
 function uploadPhoto_(payload) {
   if (!payload.propertyId || !payload.base64 || !payload.fileName) throw new Error('Imóvel, arquivo e nome são obrigatórios.');
   const props = PropertiesService.getScriptProperties();
-  let folderId = props.getProperty('PHOTO_FOLDER_ID');
+  let folderId = PHOTO_FOLDER_ID || props.getProperty('PHOTO_FOLDER_ID');
   let folder = folderId ? DriveApp.getFolderById(folderId) : null;
   if (!folder) {
     folder = DriveApp.createFolder('Aline Martins - Fotos de Imóveis');
