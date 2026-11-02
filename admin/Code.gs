@@ -45,7 +45,9 @@ function doPost(e) {
 }
 
 function authorize_() {
-  const email = Session.getActiveUser().getEmail().toLowerCase();
+  const activeEmail = Session.getActiveUser().getEmail();
+  const effectiveEmail = Session.getEffectiveUser().getEmail();
+  const email = String(activeEmail || effectiveEmail || '').trim().toLowerCase();
   const allowed = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '';
   const emails = allowed.split(',').map(item => item.trim().toLowerCase()).filter(Boolean);
   if (!email || !emails.includes(email)) throw new Error('Conta Google não autorizada.');
