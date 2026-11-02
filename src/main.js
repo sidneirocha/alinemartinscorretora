@@ -12,8 +12,7 @@ const propertyIsRecent_=p=>{const raw=String(p.updatedAt||'').trim();if(!raw)ret
 const propertyTag_=p=>p.status==='Vendido'?'Vendido':p.status==='Alugado'?'Alugado':propertyPurpose(p);
 const propertyBadges_=p=>{const badges=[];if(p.status==='Vendido')badges.push('<span class="status-badge is-sold">Vendido</span>');else if(p.status==='Alugado')badges.push('<span class="status-badge is-rented">Alugado</span>');if(!badges.length)badges.push(`<span class="status-badge">${propertyPurpose(p)}</span>`);return badges.join('')};
 const propertyCity=p=>{const explicit=String(p.city||p['Cidade']||'').trim();if(explicit)return explicit;const text=`${p.title} ${p.raw}`.toLocaleLowerCase('pt-BR');if(/santos[\/–-]guarujá|guarujá[\/–-]santos/.test(text))return'Guarujá';if(/\b(santos|santista)\b/.test(text)&&/boqueirão|gonzaga|ponta da praia|embaré|aparecida|josé menino|marapé|campo grande|vila belmiro/.test(text))return'Santos';if(/guarujá|guaruja|pitangueiras|astúrias|asturias|enseada|tombo|jardim dos pássaros|jardim dos passaros|pernambuco|guaiúba|guaiuba/.test(text))return'Guarujá';return'Cidade não informada'};
-const SHEET_ID='1Ewu6Ipro4xAHokeBbhVc-cYfQik1PRGPrAMhtRZDu3U';
-const SHEET_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?gid=310676855#gid=310676855`;
+const SHEET_URL='';
 const AUTH_API_URL='https://script.google.com/macros/s/AKfycbxAUoa3za8ncWJIrhXnJ8rDJZgR6FC5wxqiV94MujHNWOFepWCge_7YuQMCTliXe8gdpQ/exec';
 const ADMIN_API_URL='https://script.google.com/macros/s/AKfycbyNAD6mRDSAxwZbsY6n_keGo-3e9kgk2pEUCCpYXvyL6NvVFfB8tBEKggieyf4HHzoIAg/exec';
 const adminReturnUrl_=()=>`${location.origin}${basePath}/?admin=1`;
@@ -190,6 +189,9 @@ function showAdminConfirm_(message){return new Promise(resolve=>{const overlay=d
 const seoAdminContext_=location.pathname.includes('/admin')||new URLSearchParams(location.search).has('admin')||new URLSearchParams(location.search).has('adminAuth')||new URLSearchParams(location.search).has('adminToken');
 if(!seoAdminContext_)new MutationObserver(()=>initSeo_()).observe(document.querySelector('#app'),{childList:true,subtree:true});
 initSeo_();
+function removeAdminSheetLinks_(){document.querySelectorAll('.sheet-link').forEach(link=>link.remove())}
+new MutationObserver(()=>removeAdminSheetLinks_()).observe(document.querySelector('#app'),{childList:true,subtree:true});
+removeAdminSheetLinks_();
 if('serviceWorker' in navigator)navigator.serviceWorker.register(`${basePath}/sw.js`).catch(()=>{});
 syncPublicProperties_();
 setInterval(()=>{if(!location.pathname.includes('/admin')&&!new URLSearchParams(location.search).has('admin')){window.__backgroundSync=true;syncPublicProperties_()}},30000);
