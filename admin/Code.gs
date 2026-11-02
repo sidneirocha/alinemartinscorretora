@@ -239,7 +239,10 @@ function deletePhoto_(payload) {
   for (let index = rows.length - 1; index >= 1; index -= 1) {
     const row = rows[index];
     const sameProperty = row[0] === payload.propertyId;
-    const samePhoto = payload.photoUrl ? row[4] === payload.photoUrl || row[5] === payload.photoUrl : true;
+    const rowPhotoId = extractDriveId_(row[4] || row[5]);
+    const samePhoto = payload.photoId
+      ? rowPhotoId === payload.photoId
+      : (payload.photoUrl ? row[4] === payload.photoUrl || row[5] === payload.photoUrl : true);
     if (sameProperty && samePhoto) sheet.deleteRow(index + 1);
   }
 

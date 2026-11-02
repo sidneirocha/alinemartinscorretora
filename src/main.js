@@ -85,3 +85,4 @@ new MutationObserver(()=>consolidateAdminEditor_()).observe(document.querySelect
 document.addEventListener('error',event=>{const image=event.target;if(image?.tagName!=='IMG'||image.dataset.fallbackTried)return;const match=properties.flatMap(property=>property.images||[]).find(photo=>photo.localSrc===image.src||photo.url===image.src);if(match?.fallback){image.dataset.fallbackTried='true';image.src=match.fallback}},true);
 document.addEventListener('error',event=>{const image=event.target;if(image?.tagName!=='IMG'||image.dataset.driveFallbackTried)return;const source=image.currentSrc||image.src;const match=source.match(/(?:[?&]id=|\/d\/)([A-Za-z0-9_-]+)/);if(!match)return;image.dataset.driveFallbackTried='true';image.src=`https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`},true);
 syncPublicProperties_();
+setInterval(()=>{if(!location.pathname.includes('/admin'))syncPublicProperties_()},30000);
