@@ -177,6 +177,7 @@ function update_(property) {
 function create_(property) {
   property = { ...(property || {}) };
   if (!/^IMV\d+$/i.test(String(property.ID || ''))) property.ID = nextId_();
+  if (!property['Atualizado em']) property['Atualizado em'] = new Date();
   validate_(property);
   const sheet = sheet_();
   if (sheet.getLastRow() === 0) sheet.appendRow(ALL_HEADERS);
