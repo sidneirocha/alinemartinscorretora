@@ -80,8 +80,8 @@ function list_() {
     const photoId = extractDriveId_(url);
     if (!propertyId || !url || !photoId) return;
     if (!photosByProperty[propertyId]) photosByProperty[propertyId] = [];
-    const stableUrl = `https://drive.google.com/thumbnail?id=${photoId}&sz=w1600`;
-    const fallbackUrl = `https://drive.google.com/uc?export=view&id=${photoId}`;
+    const stableUrl = `https://lh3.googleusercontent.com/d/${photoId}=w1600`;
+    const fallbackUrl = `https://drive.google.com/thumbnail?id=${photoId}&sz=w1600`;
     photosByProperty[propertyId].push({ id: photoId, localSrc: stableUrl, url: stableUrl, fallback: fallbackUrl, order: Number(row[2]) || 0 });
   });
 
@@ -192,7 +192,7 @@ function uploadPhoto_(payload) {
   const blob = Utilities.newBlob(bytes, payload.mimeType || 'image/jpeg', payload.fileName);
   const file = folder.createFile(blob);
   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  const url = `https://drive.google.com/thumbnail?id=${file.getId()}&sz=w1600`;
+  const url = `https://lh3.googleusercontent.com/d/${file.getId()}=w1600`;
   const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(PHOTO_SHEET_NAME);
   if (sheet) sheet.appendRow([propertyId, payload.title || '', Number(payload.order) || sheet.getLastRow(), 'Galeria de imóvel', url, url, '', '', '', 'Enviada pelo painel administrativo']);
   return { id: file.getId(), url: url, name: file.getName() };
@@ -257,7 +257,8 @@ function reorderPhotos_(payload) {
 }
 
 function extractDriveId_(url) {
-  const match = String(url || '').match(/[?&]id=([^&]+)/);
+  const value = String(url || '');
+  const match = value.match(/[?&]id=([^&]+)/) || value.match(/\/d\/([A-Za-z0-9_-]+)/) || value.match(/googleusercontent\.com\/d\/([A-Za-z0-9_-]+)/);
   return match ? match[1] : '';
 }
 
