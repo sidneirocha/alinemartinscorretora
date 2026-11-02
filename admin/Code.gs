@@ -9,7 +9,7 @@ const SHEET_NAME = 'IMÓVEIS';
 const PHOTO_SHEET_NAME = 'FOTOS';
 const HEADERS = ['ID', 'Título', 'Operação', 'Preço (texto do site)', 'Endereço / localização exibida', 'Área', 'Quartos', 'Banheiros', 'Andares (campo do site)', 'Condomínio', 'IPTU', 'Características e resumo da descrição'];
 // Estrutura real da aba IMÓVEIS.
-const ALL_HEADERS = HEADERS.concat(['URL', 'Fotos', 'Status CMS', 'Destaque', 'Slug', 'Atualizado em']);
+const ALL_HEADERS = HEADERS.concat(['URL', 'Fotos', 'Status CMS', 'Destaque', 'Slug', 'Atualizado em', 'Cidade']);
 
 function doGet(e) {
   try {
@@ -55,6 +55,14 @@ function authorize_() {
 function sheet_() {
   const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
   if (!sheet) throw new Error('A aba IMÓVEIS não foi encontrada.');
+
+  // Mantém as colunas atuais e cria a nova coluna de cidade no fim da tabela.
+  if (sheet.getMaxColumns() < ALL_HEADERS.length) {
+    sheet.insertColumnsAfter(sheet.getMaxColumns(), ALL_HEADERS.length - sheet.getMaxColumns());
+  }
+  if (sheet.getRange(1, ALL_HEADERS.length).getDisplayValue() !== 'Cidade') {
+    sheet.getRange(1, ALL_HEADERS.length).setValue('Cidade');
+  }
 
   return sheet;
 }
@@ -171,6 +179,7 @@ function delete_(id) {
 
 function uploadPhoto_(payload) {
   if (!payload.propertyId || !payload.base64 || !payload.fileName) throw new Error('Imóvel, arquivo e nome são obrigatórios.');
+  const propertyId = payload.propertyId === 'Automático' ? latestPropertyId_() : payload.propertyId;
   const props = PropertiesService.getScriptProperties();
   let folderId = PHOTO_FOLDER_ID || props.getProperty('PHOTO_FOLDER_ID');
   let folder = folderId ? DriveApp.getFolderById(folderId) : null;
@@ -185,8 +194,15 @@ function uploadPhoto_(payload) {
   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   const url = `https://drive.google.com/thumbnail?id=${file.getId()}&sz=w1600`;
   const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(PHOTO_SHEET_NAME);
-  if (sheet) sheet.appendRow([payload.propertyId, payload.title || '', Number(payload.order) || sheet.getLastRow(), 'Galeria de imóvel', url, url, '', '', '', 'Enviada pelo painel administrativo']);
+  if (sheet) sheet.appendRow([propertyId, payload.title || '', Number(payload.order) || sheet.getLastRow(), 'Galeria de imóvel', url, url, '', '', '', 'Enviada pelo painel administrativo']);
   return { id: file.getId(), url: url, name: file.getName() };
+}
+
+function latestPropertyId_() {
+  const sheet = sheet_();
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) throw new Error('O imóvel precisa ser criado antes do envio das fotos.');
+  return sheet.getRange(lastRow, 1).getDisplayValue();
 }
 
 function deletePhoto_(payload) {
