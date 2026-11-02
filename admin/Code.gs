@@ -42,7 +42,8 @@ function authPage_(e) {
     ? requested
     : 'https://sidneirocha.github.io/alinemartinscorretora/admin';
   const destination = `${returnUrl}${returnUrl.includes('?') ? '&' : '?'}adminAuth=1`;
-  return HtmlService.createHtmlOutput(`<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{margin:0;padding:24px;font:16px Arial,sans-serif;color:#191919;background:#f7f4ed}p{max-width:32rem;margin:20vh auto;text-align:center}</style></head><body><p>Autenticação concluída. Retornando ao painel…</p><script>window.top.location.replace(${JSON.stringify(destination)})</script></body></html>`);
+  const safeDestination = destination.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  return HtmlService.createHtmlOutput(`<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{margin:0;padding:24px;font:16px Arial,sans-serif;color:#191919;background:#f7f4ed}main{max-width:32rem;margin:20vh auto;text-align:center}a{display:inline-block;margin-top:18px;padding:14px 20px;border-radius:8px;background:#191919;color:#fff;text-decoration:none}</style></head><body><main><p>Autenticação concluída.</p><a href="${safeDestination}" target="_top">Continuar para o painel</a></main></body></html>`);
 }
 
 function doPost(e) {
