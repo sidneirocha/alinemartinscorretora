@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#d3b36a" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="author" content="Aline Martins Corretora de Imóveis" />
+    <meta name="keywords" content="imóveis no Guarujá, imóveis em Santos, apartamentos à venda, apartamentos para locação, corretora de imóveis" />
+    <meta name="geo.region" content="BR-SP" />
+    <meta name="geo.placename" content="Guarujá e Santos, São Paulo" />
     <link rel="manifest" href="/alinemartinscorretora/manifest.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="/alinemartinscorretora/favicon.svg" />
     <link rel="shortcut icon" href="/alinemartinscorretora/favicon.svg" />
@@ -20,10 +25,47 @@
     <meta property="og:image:type" content="image/webp" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="pt_BR" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Aline Martins - Corretora de Imóveis" />
     <meta name="twitter:description" content="Descubra o lugar perfeito para chamar de lar." />
     <meta name="twitter:image" content="https://sidneirocha.github.io/alinemartinscorretora/assets/og-image.webp" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "RealEstateAgent",
+            "@id": "https://sidneirocha.github.io/alinemartinscorretora/#agent",
+            "name": "Aline Martins Corretora de Imóveis",
+            "url": "https://sidneirocha.github.io/alinemartinscorretora/",
+            "image": "https://sidneirocha.github.io/alinemartinscorretora/assets/og-image.webp",
+            "telephone": "+55 13 99190-9588",
+            "areaServed": ["Guarujá", "Santos", "São Paulo"],
+            "sameAs": ["https://www.instagram.com/alinemartins.imoveis/"],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+55 13 99190-9588",
+              "contactType": "sales",
+              "availableLanguage": "Portuguese"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://sidneirocha.github.io/alinemartinscorretora/#website",
+            "url": "https://sidneirocha.github.io/alinemartinscorretora/",
+            "name": "Aline Martins Corretora de Imóveis",
+            "inLanguage": "pt-BR",
+            "publisher": {"@id": "https://sidneirocha.github.io/alinemartinscorretora/#agent"},
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://sidneirocha.github.io/alinemartinscorretora/imoveis/?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="app"></div>

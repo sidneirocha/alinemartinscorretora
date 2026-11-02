@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /?admin=1
+Disallow: /?adminAuth=1
+Sitemap: https://sidneirocha.github.io/alinemartinscorretora/sitemap.xml

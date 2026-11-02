@@ -1,0 +1,24 @@
+# Aline Martins Corretora de Imóveis
+
+> Corretora de imóveis especializada em imóveis residenciais no Guarujá e em Santos, São Paulo, Brasil.
+
+## Site
+
+- Página inicial: https://sidneirocha.github.io/alinemartinscorretora/
+- Lista de imóveis: https://sidneirocha.github.io/alinemartinscorretora/imoveis/
+- Sobre a corretora: https://sidneirocha.github.io/alinemartinscorretora/sobre/
+- Contato: https://sidneirocha.github.io/alinemartinscorretora/contato/
+
+## Atendimento
+
+- WhatsApp: +55 13 99190-9588
+- Instagram: https://www.instagram.com/alinemartins.imoveis/
+- CRECI: 285625-F
+
+## Escopo
+
+O site apresenta apartamentos e casas para venda e locação, com informações de preço, área, quartos, banheiros, localização, descrição e fotos. Consulte sempre a página individual do imóvel para os dados mais recentes.
+
+## Catálogo
+
+- Sitemap: https://sidneirocha.github.io/alinemartinscorretora/sitemap.xml
