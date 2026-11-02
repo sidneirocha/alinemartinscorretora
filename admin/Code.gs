@@ -8,7 +8,9 @@ const PHOTO_FOLDER_ID = '1fRDgyNIGAqQwj1rkJfXp0PPvWXmaEMq6';
 const SHEET_NAME = 'IMÓVEIS';
 const PHOTO_SHEET_NAME = 'FOTOS';
 const HEADERS = ['ID', 'Título', 'Operação', 'Preço (texto do site)', 'Endereço / localização exibida', 'Área', 'Quartos', 'Banheiros', 'Andares (campo do site)', 'Condomínio', 'IPTU', 'Características e resumo da descrição'];
-const ALL_HEADERS = HEADERS.concat(['Status']);
+// A planilha já possui a coluna URL depois dos campos principais.
+// O Status fica na coluna seguinte para não sobrescrever os links dos imóveis.
+const ALL_HEADERS = HEADERS.concat(['URL', 'Status']);
 
 function doGet(e) {
   try {
