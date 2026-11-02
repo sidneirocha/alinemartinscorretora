@@ -133,24 +133,46 @@ function list_() {
   const values = sheet_().getDataRange().getDisplayValues();
   const properties = values.slice(1).filter(row => row[0]).map(rowToProperty_);
   const photoSheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(PHOTO_SHEET_NAME);
-  if (!photoSheet || photoSheet.getLastRow() < 2) return properties;
-
   const photosByProperty = {};
-  photoSheet.getDataRange().getDisplayValues().slice(1).forEach(row => {
-    const propertyId = row[0];
-    const url = row[4] || row[5];
-    const photoId = extractDriveId_(url);
-    if (!propertyId || !url || !photoId) return;
-    if (!photosByProperty[propertyId]) photosByProperty[propertyId] = [];
-    const stableUrl = `https://lh3.googleusercontent.com/d/${photoId}=w1600`;
-    const fallbackUrl = `https://drive.google.com/thumbnail?id=${photoId}&sz=w1600`;
-    photosByProperty[propertyId].push({ id: photoId, localSrc: stableUrl, url: stableUrl, fallback: fallbackUrl, order: Number(row[2]) || 0 });
-  });
+  if (photoSheet && photoSheet.getLastRow() >= 2) {
+    photoSheet.getDataRange().getDisplayValues().slice(1).forEach(row => {
+      const propertyId = row[0];
+      const url = row[4] || row[5];
+      const photoId = extractDriveId_(url);
+      if (!propertyId || !url || !photoId) return;
+      if (!photosByProperty[propertyId]) photosByProperty[propertyId] = [];
+      const stableUrl = `https://lh3.googleusercontent.com/d/${photoId}=w1600`;
+      const fallbackUrl = `https://drive.google.com/thumbnail?id=${photoId}&sz=w1600`;
+      photosByProperty[propertyId].push({ id: photoId, localSrc: stableUrl, url: stableUrl, fallback: fallbackUrl, order: Number(row[2]) || 0 });
+    });
+  }
 
   return properties.map(property => ({
     ...property,
-    Images: (photosByProperty[property.ID] || []).sort((a, b) => a.order - b.order)
+    Images: (photosByProperty[property.ID] || []).length
+      ? photosByProperty[property.ID].sort((a, b) => a.order - b.order)
+      : photosFromSheetCell_(property.Fotos)
   }));
+}
+
+function photosFromSheetCell_(value) {
+  let entries = [];
+  const raw = String(value || '').trim();
+  if (!raw) return entries;
+  try {
+    const parsed = JSON.parse(raw);
+    entries = Array.isArray(parsed) ? parsed : [parsed];
+  } catch (error) {
+    entries = raw.match(/https?:\/\/[^\s,;|]+/g) || raw.split(/[\n,;|]+/);
+  }
+  return entries.map((entry, index) => {
+    const url = typeof entry === 'string' ? entry.trim() : String(entry.url || entry.src || entry.localSrc || '').trim();
+    if (!url) return null;
+    const photoId = extractDriveId_(url);
+    if (!photoId) return { url: url, localSrc: url, order: index };
+    const stableUrl = `https://lh3.googleusercontent.com/d/${photoId}=w1600`;
+    return { id: photoId, localSrc: stableUrl, url: stableUrl, fallback: `https://drive.google.com/thumbnail?id=${photoId}&sz=w1600`, order: index };
+  }).filter(Boolean);
 }
 
 function rowToProperty_(row) {
