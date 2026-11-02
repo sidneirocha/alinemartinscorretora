@@ -3,7 +3,7 @@
  * Publique como Web App com acesso restrito às contas autorizadas.
  * Configure ADMIN_EMAILS nas propriedades do script, separados por vírgula.
  */
-const SPREADSHEET_ID = 'bhVc-cYfQik1PRGPrAMhtRZDu3U';
+const SPREADSHEET_ID = '1Ewu6Ipro4xAHokeBbhVc-cYfQik1PRGPrAMhtRZDu3U';
 const PHOTO_FOLDER_ID = '1fRDgyNIGAqQwj1rkJfXp0PPvWXmaEMq6';
 const SHEET_NAME = 'IMÓVEIS';
 const PHOTO_SHEET_NAME = 'FOTOS';
