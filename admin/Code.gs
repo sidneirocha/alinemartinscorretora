@@ -102,12 +102,10 @@ function authorizeEmailNotifications() {
 
 function authorize_() {
   const activeEmail = Session.getActiveUser().getEmail();
-  const effectiveEmail = Session.getEffectiveUser().getEmail();
   const configured = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '';
   const emails = [...new Set(DEFAULT_ADMIN_EMAILS.concat(configured.split(',')))].map(item => item.trim().toLowerCase()).filter(Boolean);
-  const candidates = [activeEmail, effectiveEmail].map(item => String(item || '').trim().toLowerCase()).filter(Boolean);
-  const authorizedEmail = candidates.find(email => emails.includes(email));
-  if (!authorizedEmail) throw new Error('Conta Google não autorizada.');
+  const authorizedEmail = String(activeEmail || '').trim().toLowerCase();
+  if (!authorizedEmail || !emails.includes(authorizedEmail)) throw new Error('Conta Google não autorizada.');
   return authorizedEmail;
 }
 
