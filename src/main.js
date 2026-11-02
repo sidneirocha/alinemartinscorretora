@@ -9,8 +9,8 @@ const asset=(src)=>src?.startsWith('http')?src:`${import.meta.env.BASE_URL}${(sr
 const properties=catalog.properties.map((p,i)=>{const lines=p.text.split('\n').map(x=>x.trim()).filter(Boolean);const title=lines[5]||decodeURIComponent(new URL(p.url).pathname.split('/').pop()).replaceAll('-',' ');const price=lines.find(x=>/R?\$?\s?\d+.*MIL/i.test(x))||'Consulte';const area=(lines.find(x=>/\d+\s?m²/.test(x))||'').match(/\d+\s?m²/)?.[0]||'';return {id:i,url:new URL(p.url).pathname,title,price,size:area,image:asset(p.images[0]?.localSrc),images:p.images,raw:p.text,lines}});
 const propertyPurpose=p=>/locação|locacao/i.test(p.raw)?'Locação':'Venda';
 const propertyCity=p=>{const text=`${p.title} ${p.raw}`.toLocaleLowerCase('pt-BR');if(/santos[\/–-]guarujá|guarujá[\/–-]santos/.test(text))return'Guarujá';if(/\b(santos|santista)\b/.test(text)&&/boqueirão|gonzaga|ponta da praia|embaré|aparecida|josé menino|marapé|campo grande|vila belmiro/.test(text))return'Santos';if(/guarujá|guaruja|pitangueiras|astúrias|asturias|enseada|tombo|jardim dos pássaros|jardim dos passaros|pernambuco|guaiúba|guaiuba/.test(text))return'Guarujá';return'Guarujá'};
-const SHEET_ID='bhVc-cYfQik1PRGPrAMhtRZDu3U';
-const SHEET_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?gid=280006184#gid=280006184`;
+const SHEET_ID='1Ewu6Ipro4xAHokeBbhVc-cYfQik1PRGPrAMhtRZDu3U';
+const SHEET_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?gid=310676855#gid=310676855`;
 const ADMIN_API_URL='https://script.google.com/macros/s/AKfycbxAUoa3za8ncWJIrhXnJ8rDJZgR6FC5wxqiV94MujHNWOFepWCge_7YuQMCTliXe8gdpQ/exec';
 let activePageCleanups=[];const registerPageCleanup=fn=>activePageCleanups.push(fn);const disposePageEffects=()=>{activePageCleanups.splice(0).forEach(cleanup=>cleanup())};
 const faqs=[
