@@ -62,6 +62,18 @@ function saveMessage_(payload) {
     sheet.getRange(1, 1, 1, MESSAGE_HEADERS.length).setValues([MESSAGE_HEADERS]);
   }
   sheet.appendRow([new Date(), payload.name, payload.phone || '', payload.email, payload.objective || '', payload.message, 'Nova']);
+  const configured = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '';
+  const recipients = [...new Set(DEFAULT_ADMIN_EMAILS.concat(configured.split(',')))].map(item => item.trim().toLowerCase()).filter(Boolean);
+  try {
+    MailApp.sendEmail({
+      to: recipients.join(','),
+      replyTo: payload.email,
+      subject: `Nova mensagem do site — ${payload.name}`,
+      body: `Nome: ${payload.name}\nTelefone: ${payload.phone || 'Não informado'}\nE-mail: ${payload.email}\nObjetivo: ${payload.objective || 'Não informado'}\n\nMensagem:\n${payload.message}`
+    });
+  } catch (error) {
+    console.log(`Mensagem salva, mas o e-mail não foi enviado: ${error.message}`);
+  }
   return 'Mensagem salva.';
 }
 
