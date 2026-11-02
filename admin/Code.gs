@@ -54,7 +54,23 @@ function sheet_() {
 
 function list_() {
   const values = sheet_().getDataRange().getDisplayValues();
-  return values.slice(1).filter(row => row[0]).map(rowToProperty_);
+  const properties = values.slice(1).filter(row => row[0]).map(rowToProperty_);
+  const photoSheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(PHOTO_SHEET_NAME);
+  if (!photoSheet || photoSheet.getLastRow() < 2) return properties;
+
+  const photosByProperty = {};
+  photoSheet.getDataRange().getDisplayValues().slice(1).forEach(row => {
+    const propertyId = row[0];
+    const url = row[4] || row[5];
+    if (!propertyId || !url) return;
+    if (!photosByProperty[propertyId]) photosByProperty[propertyId] = [];
+    photosByProperty[propertyId].push({ localSrc: url, url: url, order: Number(row[2]) || 0 });
+  });
+
+  return properties.map(property => ({
+    ...property,
+    Images: photosByProperty[property.ID] || []
+  }));
 }
 
 function rowToProperty_(row) {
