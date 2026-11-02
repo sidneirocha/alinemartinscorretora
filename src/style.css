@@ -232,3 +232,4 @@ footer a{transition:color .2s ease}footer a:hover{color:#191919}
 .pwa-install-toast{right:auto;left:50%;transform:translateX(-50%);bottom:24px}
 .admin-access .header.scrolled{background:rgba(25,25,25,.94);color:#fff;box-shadow:0 1px 18px #0003}.admin-access .header.scrolled nav a:not(.whatsapp){color:#fff}.admin-access .header.scrolled .whatsapp{color:#191919;background:rgba(255,255,255,.88)}
 .admin-access.is-connected{padding-top:100px;background:#f7f4ed!important}.admin-access.is-connected .admin-intro{display:none}.admin-access.is-connected .admin-shell{display:block;max-width:1180px}.admin-access.is-connected .header{background:#191919;color:#fff}.admin-access.is-connected .header nav a:not(.whatsapp){color:#fff}
+.admin-recovery-link{display:block;margin-top:12px;color:#a77d2d;font-size:12px;text-decoration:underline;text-underline-offset:3px}
