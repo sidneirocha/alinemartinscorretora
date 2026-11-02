@@ -13,8 +13,9 @@ const ALL_HEADERS = HEADERS.concat(['URL', 'Fotos', 'Status CMS', 'Destaque', 'S
 
 function doGet(e) {
   try {
-    authorize_();
     const action = (e && e.parameter && e.parameter.action) || 'list';
+    if (action === 'public') return response_({ ok: true, properties: list_() }, e);
+    authorize_();
     if (action === 'list') return response_({ ok: true, properties: list_() }, e);
     return response_({ ok: false, error: 'Ação GET inválida.' }, e);
   } catch (error) {
