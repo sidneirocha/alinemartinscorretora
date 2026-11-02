@@ -23,7 +23,7 @@ function doGet(e) {
     const action = (e && e.parameter && e.parameter.action) || 'list';
     if (action === 'public') return response_({ ok: true, properties: list_() }, e);
     if (action === 'auth') return authPage_(e);
-    const authorizedEmail = authorize_();
+    const authorizedEmail = authorize_((e && e.parameter && e.parameter.adminToken) || '');
     if (action === 'create') {
       const property = JSON.parse((e && e.parameter && e.parameter.payload) || '{}');
       return response_({ ok: true, email: authorizedEmail, property: create_(property) }, e);
@@ -37,11 +37,12 @@ function doGet(e) {
 
 function authPage_(e) {
   authorize_();
+  const adminToken = issueAdminToken_(Session.getActiveUser().getEmail());
   const requested = String((e && e.parameter && e.parameter.return) || '');
   const returnUrl = requested.startsWith('https://sidneirocha.github.io/alinemartinscorretora')
     ? requested
     : 'https://sidneirocha.github.io/alinemartinscorretora/admin';
-  const destination = `${returnUrl}${returnUrl.includes('?') ? '&' : '?'}adminAuth=1`;
+  const destination = `${returnUrl}${returnUrl.includes('?') ? '&' : '?'}admin=1&adminAuth=1&adminToken=${encodeURIComponent(adminToken)}`;
   const safeDestination = destination.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
   return HtmlService.createHtmlOutput(`<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{margin:0;padding:24px;font:16px Arial,sans-serif;color:#191919;background:#f7f4ed}main{max-width:32rem;margin:20vh auto;text-align:center}a{display:inline-block;margin-top:18px;padding:14px 20px;border-radius:8px;background:#191919;color:#fff;text-decoration:none}</style></head><body><main><p>Autenticação concluída.</p><a href="${safeDestination}" target="_top">Continuar para o painel</a></main></body></html>`);
 }
@@ -50,7 +51,7 @@ function doPost(e) {
   try {
     const payload = JSON.parse((e && e.postData && e.postData.contents) || '{}');
     if (payload.action === 'contact') return json_({ ok: true, message: saveMessage_(payload) });
-    authorize_();
+    authorize_(payload.adminToken || (e && e.parameter && e.parameter.adminToken) || '');
     if (payload.action === 'update') return json_({ ok: true, property: update_(payload.property) });
     if (payload.action === 'create') return json_({ ok: true, property: create_(payload.property) });
     if (payload.action === 'uploadPhoto') return json_({ ok: true, photo: uploadPhoto_(payload) });
@@ -101,13 +102,23 @@ function authorizeEmailNotifications() {
   });
 }
 
-function authorize_() {
+function authorize_(adminToken) {
   const activeEmail = Session.getActiveUser().getEmail();
   const configured = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '';
   const emails = [...new Set(DEFAULT_ADMIN_EMAILS.concat(configured.split(',')))].map(item => item.trim().toLowerCase()).filter(Boolean);
+  if (adminToken) {
+    const tokenEmail = CacheService.getScriptCache().get(`admin-token-${adminToken}`);
+    if (tokenEmail && emails.includes(tokenEmail)) return tokenEmail;
+  }
   const authorizedEmail = String(activeEmail || '').trim().toLowerCase();
   if (!authorizedEmail || !emails.includes(authorizedEmail)) throw new Error('Conta Google não autorizada.');
   return authorizedEmail;
+}
+
+function issueAdminToken_(email) {
+  const token = Utilities.getUuid();
+  CacheService.getScriptCache().put(`admin-token-${token}`, String(email || '').trim().toLowerCase(), 3600);
+  return token;
 }
 
 function sheet_() {
