@@ -62,6 +62,7 @@ function saveMessage_(payload) {
     sheet.getRange(1, 1, 1, MESSAGE_HEADERS.length).setValues([MESSAGE_HEADERS]);
   }
   sheet.appendRow([new Date(), payload.name, payload.phone || '', payload.email, payload.objective || '', payload.message, 'Nova']);
+  const messageRow = sheet.getLastRow();
   const configured = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '';
   const recipients = [...new Set(DEFAULT_ADMIN_EMAILS.concat(configured.split(',')))].map(item => item.trim().toLowerCase()).filter(Boolean);
   try {
@@ -71,10 +72,21 @@ function saveMessage_(payload) {
       subject: `Nova mensagem do site — ${payload.name}`,
       body: `Nome: ${payload.name}\nTelefone: ${payload.phone || 'Não informado'}\nE-mail: ${payload.email}\nObjetivo: ${payload.objective || 'Não informado'}\n\nMensagem:\n${payload.message}`
     });
+    sheet.getRange(messageRow, MESSAGE_HEADERS.indexOf('Status') + 1).setValue('Nova — e-mail enviado');
   } catch (error) {
-    console.log(`Mensagem salva, mas o e-mail não foi enviado: ${error.message}`);
+    sheet.getRange(messageRow, MESSAGE_HEADERS.indexOf('Status') + 1).setValue(`Nova — e-mail pendente: ${error.message}`);
   }
   return 'Mensagem salva.';
+}
+
+function authorizeEmailNotifications() {
+  const email = Session.getEffectiveUser().getEmail();
+  MailApp.getRemainingDailyQuota();
+  MailApp.sendEmail({
+    to: email,
+    subject: 'Autorização de notificações — Aline Martins',
+    body: 'O envio automático de mensagens do site foi autorizado com sucesso.'
+  });
 }
 
 function authorize_() {
