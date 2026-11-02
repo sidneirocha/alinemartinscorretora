@@ -12,6 +12,11 @@ const propertyCity=p=>{const text=`${p.title} ${p.raw}`.toLocaleLowerCase('pt-BR
 const SHEET_ID='1Ewu6Ipro4xAHokeBbhVc-cYfQik1PRGPrAMhtRZDu3U';
 const SHEET_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?gid=310676855#gid=310676855`;
 const ADMIN_API_URL='https://script.google.com/macros/s/AKfycbxAUoa3za8ncWJIrhXnJ8rDJZgR6FC5wxqiV94MujHNWOFepWCge_7YuQMCTliXe8gdpQ/exec';
+// Apps Script não expõe cabeçalhos CORS para chamadas autenticadas do GitHub Pages.
+// GET usa JSONP e POST usa uma requisição simples (sem preflight), mantendo a sessão Google.
+const nativeFetch=window.fetch.bind(window);
+const apiJsonp=(url)=>new Promise((resolve,reject)=>{const callback=`__adminCallback${Date.now()}${Math.random().toString(36).slice(2)}`;const script=document.createElement('script');const cleanup=()=>{delete window[callback];script.remove()};window[callback]=data=>{cleanup();resolve({ok:true,status:200,json:async()=>data})};script.onerror=()=>{cleanup();reject(new Error('Não foi possível acessar o Apps Script.'))};script.src=`${url}${url.includes('?')?'&':'?'}callback=${encodeURIComponent(callback)}&_=${Date.now()}`;document.head.append(script)});
+window.fetch=(url,options={})=>{if(String(url).startsWith(ADMIN_API_URL)){const method=(options.method||'GET').toUpperCase();if(method==='GET')return apiJsonp(String(url));return nativeFetch(url,{...options,mode:'no-cors',credentials:'include'}).then(()=>({ok:true,status:200,json:async()=>({ok:true})}))}return nativeFetch(url,options)};
 let activePageCleanups=[];const registerPageCleanup=fn=>activePageCleanups.push(fn);const disposePageEffects=()=>{activePageCleanups.splice(0).forEach(cleanup=>cleanup())};
 const faqs=[
  ['Quais custos adicionais devo considerar ao comprar um imóvel no Guarujá, além do preço de venda?','Resposta: Além do valor do imóvel, você deve incluir despesas como Imposto de Transmissão de Bens Imóveis (ITBI), registro no Cartório de Imóveis, escritura pública (se não for financiado pelo SFH), e custos de corretagem. Se for um apartamento, verifique também o valor do condomínio e do IPTU.'],

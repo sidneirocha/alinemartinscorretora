@@ -15,10 +15,10 @@ function doGet(e) {
   try {
     authorize_();
     const action = (e && e.parameter && e.parameter.action) || 'list';
-    if (action === 'list') return json_({ ok: true, properties: list_() });
-    return json_({ ok: false, error: 'Ação GET inválida.' });
+    if (action === 'list') return response_({ ok: true, properties: list_() }, e);
+    return response_({ ok: false, error: 'Ação GET inválida.' }, e);
   } catch (error) {
-    return json_({ ok: false, error: error.message });
+    return response_({ ok: false, error: error.message }, e);
   }
 }
 
@@ -151,4 +151,14 @@ function uploadPhoto_(payload) {
 
 function json_(data) {
   return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function response_(data, e) {
+  const callback = e && e.parameter && e.parameter.callback;
+  if (callback && /^[A-Za-z_$][0-9A-Za-z_$\.]*$/.test(callback)) {
+    return ContentService
+      .createTextOutput(`${callback}(${JSON.stringify(data)});`)
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return json_(data);
 }
