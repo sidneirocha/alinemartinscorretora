@@ -1,0 +1,13 @@
+{
+  "name": "Aline Martins Corretora",
+  "short_name": "Aline Martins",
+  "description": "Imóveis selecionados por Aline Martins Corretora.",
+  "start_url": "/alinemartinscorretora/",
+  "scope": "/alinemartinscorretora/",
+  "display": "standalone",
+  "background_color": "#191919",
+  "theme_color": "#d3b36a",
+  "icons": [
+    { "src": "/alinemartinscorretora/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
