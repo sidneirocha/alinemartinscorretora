@@ -5,7 +5,9 @@
  */
 const SPREADSHEET_ID = 'bhVc-cYfQik1PRGPrAMhtRZDu3U';
 const SHEET_NAME = 'IMÓVEIS';
+const PHOTO_SHEET_NAME = 'FOTOS';
 const HEADERS = ['ID', 'Título', 'Operação', 'Preço (texto do site)', 'Endereço / localização exibida', 'Área', 'Quartos', 'Banheiros', 'Andares (campo do site)', 'Condomínio', 'IPTU', 'Características e resumo da descrição'];
+const ALL_HEADERS = HEADERS.concat(['Status']);
 
 function doGet(e) {
   try {
@@ -24,6 +26,9 @@ function doPost(e) {
     const payload = JSON.parse((e && e.postData && e.postData.contents) || '{}');
     if (payload.action === 'update') return json_({ ok: true, property: update_(payload.property) });
     if (payload.action === 'create') return json_({ ok: true, property: create_(payload.property) });
+    if (payload.action === 'uploadPhoto') return json_({ ok: true, photo: uploadPhoto_(payload) });
+    if (payload.action === 'status') return json_({ ok: true, property: setStatus_(payload.id, payload.status) });
+    if (payload.action === 'delete') return json_({ ok: true, deleted: delete_(payload.id) });
     return json_({ ok: false, error: 'Ação POST inválida.' });
   } catch (error) {
     return json_({ ok: false, error: error.message });
@@ -40,6 +45,7 @@ function authorize_() {
 function sheet_() {
   const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
   if (!sheet) throw new Error('A aba IMÓVEIS não foi encontrada.');
+  if (sheet.getRange(1, ALL_HEADERS.length).getDisplayValue() !== 'Status') sheet.getRange(1, ALL_HEADERS.length).setValue('Status');
   return sheet;
 }
 
@@ -49,7 +55,7 @@ function list_() {
 }
 
 function rowToProperty_(row) {
-  return HEADERS.reduce((property, header, index) => {
+  return ALL_HEADERS.reduce((property, header, index) => {
     property[header] = row[index] || '';
     return property;
   }, {});
@@ -72,8 +78,8 @@ function update_(property) {
   validate_(property);
   const sheet = sheet_();
   const row = findRow_(property.ID);
-  sheet.getRange(row, 1, 1, HEADERS.length).setValues([HEADERS.map(header => property[header] || '')]);
-  return rowToProperty_(sheet.getRange(row, 1, 1, HEADERS.length).getDisplayValues()[0]);
+  sheet.getRange(row, 1, 1, ALL_HEADERS.length).setValues([ALL_HEADERS.map(header => property[header] || (header === 'Status' ? 'Ativo' : ''))]);
+  return rowToProperty_(sheet.getRange(row, 1, 1, ALL_HEADERS.length).getDisplayValues()[0]);
 }
 
 function create_(property) {
@@ -83,8 +89,44 @@ function create_(property) {
   if (sheet.getRange(2, 1, Math.max(sheet.getLastRow() - 1, 1), 1).getDisplayValues().flat().includes(property.ID)) {
     throw new Error('Já existe um imóvel com este ID.');
   }
-  sheet.appendRow(HEADERS.map(header => property[header] || ''));
+  sheet.appendRow(ALL_HEADERS.map(header => property[header] || (header === 'Status' ? 'Ativo' : '')));
   return property;
+}
+
+function setStatus_(id, status) {
+  const allowed = ['Ativo', 'Vendido', 'Alugado', 'Desativado'];
+  if (!allowed.includes(status)) throw new Error('Status inválido.');
+  const sheet = sheet_();
+  const row = findRow_(id);
+  sheet.getRange(row, ALL_HEADERS.indexOf('Status') + 1).setValue(status);
+  return rowToProperty_(sheet.getRange(row, 1, 1, ALL_HEADERS.length).getDisplayValues()[0]);
+}
+
+function delete_(id) {
+  const sheet = sheet_();
+  const row = findRow_(id);
+  sheet.deleteRow(row);
+  return id;
+}
+
+function uploadPhoto_(payload) {
+  if (!payload.propertyId || !payload.base64 || !payload.fileName) throw new Error('Imóvel, arquivo e nome são obrigatórios.');
+  const props = PropertiesService.getScriptProperties();
+  let folderId = props.getProperty('PHOTO_FOLDER_ID');
+  let folder = folderId ? DriveApp.getFolderById(folderId) : null;
+  if (!folder) {
+    folder = DriveApp.createFolder('Aline Martins - Fotos de Imóveis');
+    folderId = folder.getId();
+    props.setProperty('PHOTO_FOLDER_ID', folderId);
+  }
+  const bytes = Utilities.base64Decode(payload.base64);
+  const blob = Utilities.newBlob(bytes, payload.mimeType || 'image/jpeg', payload.fileName);
+  const file = folder.createFile(blob);
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  const url = `https://drive.google.com/uc?export=view&id=${file.getId()}`;
+  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(PHOTO_SHEET_NAME);
+  if (sheet) sheet.appendRow([payload.propertyId, payload.title || '', Number(payload.order) || sheet.getLastRow(), 'Galeria de imóvel', url, url, '', '', '', 'Enviada pelo painel administrativo']);
+  return { id: file.getId(), url: url, name: file.getName() };
 }
 
 function json_(data) {
