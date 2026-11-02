@@ -22,6 +22,7 @@ function doGet(e) {
   try {
     const action = (e && e.parameter && e.parameter.action) || 'list';
     if (action === 'public') return response_({ ok: true, properties: list_() }, e);
+    if (action === 'auth') return authPage_(e);
     const authorizedEmail = authorize_();
     if (action === 'create') {
       const property = JSON.parse((e && e.parameter && e.parameter.payload) || '{}');
@@ -32,6 +33,16 @@ function doGet(e) {
   } catch (error) {
     return response_({ ok: false, error: error.message }, e);
   }
+}
+
+function authPage_(e) {
+  authorize_();
+  const requested = String((e && e.parameter && e.parameter.return) || '');
+  const returnUrl = requested.startsWith('https://sidneirocha.github.io/alinemartinscorretora')
+    ? requested
+    : 'https://sidneirocha.github.io/alinemartinscorretora/admin';
+  const destination = `${returnUrl}${returnUrl.includes('?') ? '&' : '?'}adminAuth=1`;
+  return HtmlService.createHtmlOutput(`<script>location.replace(${JSON.stringify(destination)})</script><p>Autenticação concluída. Retornando ao painel…</p>`);
 }
 
 function doPost(e) {
