@@ -107,6 +107,78 @@ new MutationObserver(()=>initMobileAdminAuthRedirect_()).observe(document.queryS
 function initAdminInputModes_(){document.querySelectorAll('.admin-access input,.admin-access textarea').forEach(field=>{const name=field.name||'';if(['price','area','condo','iptu'].includes(name)||['Preço (texto do site)','Área','Condomínio','IPTU'].includes(name))field.inputMode='decimal';if(['rooms','baths','floors'].includes(name)||['Quartos','Banheiros','Andares (campo do site)'].includes(name))field.inputMode='numeric'})}
 function initTouchImageReorder_(){const list=document.querySelector('.admin-image-list');if(!list||list.dataset.touchReorderReady)return;list.dataset.touchReorderReady='true';let dragged=null;let pointerId=null;const persist=()=>{const propertyId=document.querySelector('.admin-quick-editor [name="property"]')?.value;const photoIds=[...list.querySelectorAll('.admin-image-item')].map(item=>item.dataset.photoId).filter(Boolean);if(!propertyId||photoIds.length<2)return;fetch(ADMIN_API_URL,{method:'POST',credentials:'include',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'reorderPhotos',propertyId,photoIds})})};list.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse'||event.target.closest('button'))return;const item=event.target.closest('.admin-image-item');if(!item)return;dragged=item;pointerId=event.pointerId;list.setPointerCapture?.(pointerId);item.classList.add('is-dragging');event.preventDefault()},{passive:false});list.addEventListener('pointermove',event=>{if(!dragged||event.pointerId!==pointerId)return;const target=document.elementFromPoint(event.clientX,event.clientY)?.closest('.admin-image-item');if(!target||target===dragged||target.parentElement!==list)return;const box=target.getBoundingClientRect();list.insertBefore(dragged,event.clientY<box.top+box.height/2?target:target.nextSibling)},{passive:false});const finish=event=>{if(!dragged||event.pointerId!==pointerId)return;dragged.classList.remove('is-dragging');list.releasePointerCapture?.(pointerId);dragged=null;pointerId=null;persist()};list.addEventListener('pointerup',finish);list.addEventListener('pointercancel',finish)}
 new MutationObserver(()=>{initAdminInputModes_();initTouchImageReorder_()}).observe(document.querySelector('#app'),{childList:true,subtree:true});
+function initBulkImageActions_(){
+  const list=document.querySelector('.admin-image-list');
+  if(!list)return;
+  const editor=list.closest('.admin-quick-editor');
+  if(!editor)return;
+  let toolbar=editor.querySelector('.admin-image-bulk-actions');
+  const updateCount=()=>{
+    const selected=list.querySelectorAll('.image-select:checked').length;
+    const total=list.querySelectorAll('.admin-image-item').length;
+    toolbar.querySelector('.admin-image-selection-count').textContent=`${selected} selecionada${selected===1?'':'s'}`;
+    toolbar.querySelector('[data-bulk-select]').textContent=selected===total?'Limpar seleção':'Selecionar todas';
+  };
+  const persistOrder=async()=>{
+    const propertyId=editor.querySelector('[name="property"]')?.value;
+    const photoIds=[...list.querySelectorAll('.admin-image-item')].map(item=>item.dataset.photoId).filter(Boolean);
+    if(propertyId&&photoIds.length)await fetch(ADMIN_API_URL,{method:'POST',credentials:'include',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'reorderPhotos',propertyId,photoIds})});
+  };
+  if(!toolbar){
+    toolbar=document.createElement('div');
+    toolbar.className='admin-image-bulk-actions';
+    toolbar.innerHTML='<span class="admin-image-selection-count">0 selecionadas</span><button type="button" data-bulk-select>Selecionar todas</button><button type="button" data-bulk-up>↑ Mover</button><button type="button" data-bulk-down>↓ Mover</button><button type="button" data-bulk-delete>Excluir</button>';
+    list.before(toolbar);
+    toolbar.addEventListener('click',async event=>{
+      const button=event.target.closest('button');
+      if(!button)return;
+      const items=[...list.querySelectorAll('.admin-image-item')];
+      const selected=items.filter(item=>item.querySelector('.image-select')?.checked);
+      if(button.matches('[data-bulk-select]')){
+        const shouldSelect=selected.length!==items.length;
+        items.forEach(item=>{item.querySelector('.image-select').checked=shouldSelect});
+        updateCount();
+        return;
+      }
+      if(!selected.length)return;
+      const selectedSet=new Set(selected);
+      if(button.matches('[data-bulk-up]')||button.matches('[data-bulk-down]')){
+        const current=[...list.querySelectorAll('.admin-image-item')];
+        if(button.matches('[data-bulk-up]')){
+          for(let index=1;index<current.length;index++)if(selectedSet.has(current[index])&&!selectedSet.has(current[index-1])){list.insertBefore(current[index],current[index-1]);[current[index-1],current[index]]=[current[index],current[index-1]]}
+        }else{
+          for(let index=current.length-2;index>=0;index--)if(selectedSet.has(current[index])&&!selectedSet.has(current[index+1])){list.insertBefore(current[index+1],current[index]);[current[index],current[index+1]]=[current[index+1],current[index]]}
+        }
+        items.forEach((item,index)=>{const order=item.querySelector('.admin-image-order');if(order)order.textContent=index===0?'Destaque':index+1});
+        await persistOrder();
+        items.forEach(item=>{item.querySelector('.image-select').checked=false});
+        updateCount();
+        return;
+      }
+      if(button.matches('[data-bulk-delete]')){
+        if(!await showAdminConfirm_(`Excluir ${selected.length} imagem${selected.length===1?'':'ns'}?`))return;
+        const progress=showActionProgress_(editor,'Excluindo imagens…');
+        try{
+          const propertyId=editor.querySelector('[name="property"]')?.value;
+          await Promise.all(selected.map(item=>fetch(ADMIN_API_URL,{method:'POST',credentials:'include',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'deletePhoto',propertyId,photoId:item.dataset.photoId,photoUrl:item.querySelector('img')?.src})})));
+          selected.forEach(item=>item.remove());
+          progress.done('Imagens excluídas com sucesso.');
+          updateCount();
+        }catch(error){progress.done('Não foi possível excluir todas as imagens.')}
+      }
+    });
+    list.addEventListener('change',event=>{if(event.target.matches('.image-select'))updateCount()});
+  }
+  list.querySelectorAll('.admin-image-item').forEach(item=>{
+    if(item.querySelector('.image-select'))return;
+    const label=document.createElement('label');
+    label.className='image-select-label';
+    label.innerHTML='<input class="image-select" type="checkbox" aria-label="Selecionar imagem"><span></span>';
+    item.append(label);
+  });
+  updateCount();
+}
+new MutationObserver(()=>initBulkImageActions_()).observe(document.querySelector('#app'),{childList:true,subtree:true});
 function showAdminConfirm_(message){return new Promise(resolve=>{const overlay=document.createElement('div');overlay.className='admin-confirm-modal';overlay.innerHTML=`<div class="admin-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="admin-confirm-title"><button type="button" class="admin-confirm-close" aria-label="Fechar">×</button><div class="eyebrow">Confirmação</div><h2 id="admin-confirm-title">Confirmar exclusão?</h2><p>${message}</p><div class="admin-confirm-actions"><button type="button" class="admin-confirm-cancel">Cancelar</button><button type="button" class="admin-confirm-ok">Excluir</button></div></div>`;const close=answer=>{overlay.remove();document.removeEventListener('keydown',onKey);resolve(answer)};const onKey=event=>{if(event.key==='Escape')close(false)};overlay.addEventListener('click',event=>{if(event.target===overlay)close(false)});overlay.querySelector('.admin-confirm-close').addEventListener('click',()=>close(false));overlay.querySelector('.admin-confirm-cancel').addEventListener('click',()=>close(false));overlay.querySelector('.admin-confirm-ok').addEventListener('click',()=>close(true));document.addEventListener('keydown',onKey);document.body.append(overlay);overlay.querySelector('.admin-confirm-cancel').focus()})}
 if('serviceWorker' in navigator)navigator.serviceWorker.register(`${basePath}/sw.js`).catch(()=>{});
 syncPublicProperties_();
