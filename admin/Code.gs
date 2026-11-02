@@ -123,6 +123,8 @@ function update_(property) {
 }
 
 function create_(property) {
+  property = { ...(property || {}) };
+  if (!/^IMV\d+$/i.test(String(property.ID || ''))) property.ID = nextId_();
   validate_(property);
   const sheet = sheet_();
   if (sheet.getLastRow() === 0) sheet.appendRow(ALL_HEADERS);
@@ -134,6 +136,17 @@ function create_(property) {
     return property[header] || '';
   }));
   return property;
+}
+
+function nextId_() {
+  const sheet = sheet_();
+  if (sheet.getLastRow() < 2) return 'IMV001';
+  const ids = sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getDisplayValues().flat();
+  const highest = ids.reduce((max, value) => {
+    const match = String(value).match(/^IMV(\d+)$/i);
+    return match ? Math.max(max, Number(match[1])) : max;
+  }, 0);
+  return `IMV${String(highest + 1).padStart(3, '0')}`;
 }
 
 function setStatus_(id, status) {
