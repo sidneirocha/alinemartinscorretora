@@ -8,9 +8,9 @@ const PHOTO_FOLDER_ID = '1fRDgyNIGAqQwj1rkJfXp0PPvWXmaEMq6';
 const SHEET_NAME = 'IMÓVEIS';
 const PHOTO_SHEET_NAME = 'FOTOS';
 const HEADERS = ['ID', 'Título', 'Operação', 'Preço (texto do site)', 'Endereço / localização exibida', 'Área', 'Quartos', 'Banheiros', 'Andares (campo do site)', 'Condomínio', 'IPTU', 'Características e resumo da descrição'];
-// A planilha já possui a coluna URL depois dos campos principais.
-// O Status fica na coluna seguinte para não sobrescrever os links dos imóveis.
-const ALL_HEADERS = HEADERS.concat(['URL', 'Status']);
+// A planilha possui URL e uma coluna numérica de fotos antes do Status.
+// O Status fica na coluna seguinte para não sobrescrever dados existentes.
+const ALL_HEADERS = HEADERS.concat(['URL', 'Fotos', 'Status']);
 
 function doGet(e) {
   try {
@@ -48,6 +48,18 @@ function authorize_() {
 function sheet_() {
   const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
   if (!sheet) throw new Error('A aba IMÓVEIS não foi encontrada.');
+
+  // Corrige a implantação anterior, que havia identificado a coluna Fotos como Status.
+  const fotosColumn = HEADERS.length + 2;
+  const fotosHeader = sheet.getRange(1, fotosColumn).getDisplayValue();
+  if (fotosHeader === 'Status' && sheet.getLastRow() > 1) {
+    const sample = sheet.getRange(2, fotosColumn, Math.min(sheet.getLastRow() - 1, 20), 1).getDisplayValues().flat();
+    const validStatuses = ['Ativo', 'Vendido', 'Alugado', 'Desativado'];
+    if (sample.some(value => value && !validStatuses.includes(value))) {
+      sheet.getRange(1, fotosColumn).setValue('Fotos');
+    }
+  }
+
   if (sheet.getRange(1, ALL_HEADERS.length).getDisplayValue() !== 'Status') sheet.getRange(1, ALL_HEADERS.length).setValue('Status');
   return sheet;
 }
