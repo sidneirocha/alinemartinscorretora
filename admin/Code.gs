@@ -69,14 +69,16 @@ function list_() {
   photoSheet.getDataRange().getDisplayValues().slice(1).forEach(row => {
     const propertyId = row[0];
     const url = row[4] || row[5];
-    if (!propertyId || !url) return;
+    const photoId = extractDriveId_(url);
+    if (!propertyId || !url || !photoId) return;
     if (!photosByProperty[propertyId]) photosByProperty[propertyId] = [];
-    photosByProperty[propertyId].push({ id: extractDriveId_(url), localSrc: url, url: url, order: Number(row[2]) || 0 });
+    const stableUrl = `https://drive.google.com/thumbnail?id=${photoId}&sz=w1600`;
+    photosByProperty[propertyId].push({ id: photoId, localSrc: stableUrl, url: stableUrl, order: Number(row[2]) || 0 });
   });
 
   return properties.map(property => ({
     ...property,
-    Images: photosByProperty[property.ID] || []
+    Images: (photosByProperty[property.ID] || []).sort((a, b) => a.order - b.order)
   }));
 }
 
@@ -180,7 +182,7 @@ function uploadPhoto_(payload) {
   const blob = Utilities.newBlob(bytes, payload.mimeType || 'image/jpeg', payload.fileName);
   const file = folder.createFile(blob);
   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  const url = `https://drive.google.com/uc?export=view&id=${file.getId()}`;
+  const url = `https://drive.google.com/thumbnail?id=${file.getId()}&sz=w1600`;
   const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(PHOTO_SHEET_NAME);
   if (sheet) sheet.appendRow([payload.propertyId, payload.title || '', Number(payload.order) || sheet.getLastRow(), 'Galeria de imóvel', url, url, '', '', '', 'Enviada pelo painel administrativo']);
   return { id: file.getId(), url: url, name: file.getName() };
