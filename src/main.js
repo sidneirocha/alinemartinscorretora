@@ -119,8 +119,12 @@ function initBulkImageActions_(){
   const updateCount=()=>{
     const selected=list.querySelectorAll('.image-select:checked').length;
     const total=list.querySelectorAll('.admin-image-item').length;
-    toolbar.querySelector('.admin-image-selection-count').textContent=`${selected} selecionada${selected===1?'':'s'}`;
-    toolbar.querySelector('[data-bulk-select]').textContent=selected===total?'Limpar seleção':'Selecionar todas';
+    const countText=`${selected} selecionada${selected===1?'':'s'}`;
+    const selectText=selected===total?'Limpar seleção':'Selecionar todas';
+    const count=toolbar.querySelector('.admin-image-selection-count');
+    const select=toolbar.querySelector('[data-bulk-select]');
+    if(count.textContent!==countText)count.textContent=countText;
+    if(select.textContent!==selectText)select.textContent=selectText;
   };
   const persistOrder=async()=>{
     const propertyId=editor.querySelector('[name="property"]')?.value;
