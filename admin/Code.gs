@@ -7,6 +7,11 @@ const SPREADSHEET_ID = '1Ewu6Ipro4xAHokeBbhVc-cYfQik1PRGPrAMhtRZDu3U';
 const PHOTO_FOLDER_ID = '1fRDgyNIGAqQwj1rkJfXp0PPvWXmaEMq6';
 const SHEET_NAME = 'IMÓVEIS';
 const PHOTO_SHEET_NAME = 'FOTOS';
+const DEFAULT_ADMIN_EMAILS = [
+  'sidneisrbarros@gmail.com',
+  'limartins.corretora@gmail.com',
+  'alinemartinsframer@gmail.com'
+];
 const HEADERS = ['ID', 'Título', 'Operação', 'Preço (texto do site)', 'Endereço / localização exibida', 'Área', 'Quartos', 'Banheiros', 'Andares (campo do site)', 'Condomínio', 'IPTU', 'Características e resumo da descrição'];
 // Estrutura real da aba IMÓVEIS.
 const ALL_HEADERS = HEADERS.concat(['URL', 'Fotos', 'Status CMS', 'Destaque', 'Slug', 'Atualizado em', 'Cidade']);
@@ -48,8 +53,8 @@ function authorize_() {
   const activeEmail = Session.getActiveUser().getEmail();
   const effectiveEmail = Session.getEffectiveUser().getEmail();
   const email = String(activeEmail || effectiveEmail || '').trim().toLowerCase();
-  const allowed = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '';
-  const emails = allowed.split(',').map(item => item.trim().toLowerCase()).filter(Boolean);
+  const configured = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '';
+  const emails = [...new Set(DEFAULT_ADMIN_EMAILS.concat(configured.split(',')))].map(item => item.trim().toLowerCase()).filter(Boolean);
   if (!email || !emails.includes(email)) throw new Error('Conta Google não autorizada.');
   return email;
 }
