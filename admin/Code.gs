@@ -35,6 +35,7 @@ function doPost(e) {
     if (payload.action === 'create') return json_({ ok: true, property: create_(payload.property) });
     if (payload.action === 'uploadPhoto') return json_({ ok: true, photo: uploadPhoto_(payload) });
     if (payload.action === 'deletePhoto') return json_({ ok: true, deleted: deletePhoto_(payload) });
+    if (payload.action === 'reorderPhotos') return json_({ ok: true, reordered: reorderPhotos_(payload) });
     if (payload.action === 'status') return json_({ ok: true, property: setStatus_(payload.id, payload.status) });
     if (payload.action === 'delete') return json_({ ok: true, deleted: delete_(payload.id) });
     return json_({ ok: false, error: 'Ação POST inválida.' });
@@ -211,6 +212,29 @@ function deletePhoto_(payload) {
   }
 
   return payload.photoUrl || fileId;
+}
+
+function reorderPhotos_(payload) {
+  if (!payload.propertyId || !Array.isArray(payload.photoIds)) {
+    throw new Error('Imóvel e ordem das imagens são obrigatórios.');
+  }
+
+  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(PHOTO_SHEET_NAME);
+  if (!sheet || sheet.getLastRow() < 2) return true;
+
+  const rows = sheet.getDataRange().getDisplayValues();
+  payload.photoIds.forEach((photoId, order) => {
+    for (let index = 1; index < rows.length; index += 1) {
+      const row = rows[index];
+      const rowPhotoId = extractDriveId_(row[4] || row[5]);
+      if (row[0] === payload.propertyId && rowPhotoId === photoId) {
+        sheet.getRange(index + 1, 3).setValue(order + 1);
+        break;
+      }
+    }
+  });
+
+  return true;
 }
 
 function extractDriveId_(url) {
