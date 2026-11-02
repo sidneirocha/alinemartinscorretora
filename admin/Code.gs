@@ -7,6 +7,8 @@ const SPREADSHEET_ID = '1Ewu6Ipro4xAHokeBbhVc-cYfQik1PRGPrAMhtRZDu3U';
 const PHOTO_FOLDER_ID = '1fRDgyNIGAqQwj1rkJfXp0PPvWXmaEMq6';
 const SHEET_NAME = 'IMÓVEIS';
 const PHOTO_SHEET_NAME = 'FOTOS';
+const MESSAGE_SHEET_NAME = 'MENSAGENS';
+const MESSAGE_HEADERS = ['Recebida em', 'Nome', 'Telefone', 'E-mail', 'Objetivo', 'Mensagem', 'Status'];
 const DEFAULT_ADMIN_EMAILS = [
   'sidneisrbarros@gmail.com',
   'limartins.corretora@gmail.com',
@@ -34,8 +36,9 @@ function doGet(e) {
 
 function doPost(e) {
   try {
-    authorize_();
     const payload = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+    if (payload.action === 'contact') return json_({ ok: true, message: saveMessage_(payload) });
+    authorize_();
     if (payload.action === 'update') return json_({ ok: true, property: update_(payload.property) });
     if (payload.action === 'create') return json_({ ok: true, property: create_(payload.property) });
     if (payload.action === 'uploadPhoto') return json_({ ok: true, photo: uploadPhoto_(payload) });
@@ -47,6 +50,19 @@ function doPost(e) {
   } catch (error) {
     return json_({ ok: false, error: error.message });
   }
+}
+
+function saveMessage_(payload) {
+  if (!payload.name || !payload.email || !payload.message) {
+    throw new Error('Nome, e-mail e mensagem são obrigatórios.');
+  }
+  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(MESSAGE_SHEET_NAME);
+  if (!sheet) throw new Error(`A aba ${MESSAGE_SHEET_NAME} não foi encontrada.`);
+  if (sheet.getRange(1, 1, 1, MESSAGE_HEADERS.length).getDisplayValues()[0].join('').trim() !== MESSAGE_HEADERS.join('').trim()) {
+    sheet.getRange(1, 1, 1, MESSAGE_HEADERS.length).setValues([MESSAGE_HEADERS]);
+  }
+  sheet.appendRow([new Date(), payload.name, payload.phone || '', payload.email, payload.objective || '', payload.message, 'Nova']);
+  return 'Mensagem salva.';
 }
 
 function authorize_() {
