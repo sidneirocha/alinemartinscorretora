@@ -11,7 +11,7 @@ const propertyPurpose=p=>/locação|locacao/i.test(p.raw)?'Locação':'Venda';
 const propertyCity=p=>{const text=`${p.title} ${p.raw}`.toLocaleLowerCase('pt-BR');if(/santos[\/–-]guarujá|guarujá[\/–-]santos/.test(text))return'Guarujá';if(/\b(santos|santista)\b/.test(text)&&/boqueirão|gonzaga|ponta da praia|embaré|aparecida|josé menino|marapé|campo grande|vila belmiro/.test(text))return'Santos';if(/guarujá|guaruja|pitangueiras|astúrias|asturias|enseada|tombo|jardim dos pássaros|jardim dos passaros|pernambuco|guaiúba|guaiuba/.test(text))return'Guarujá';return'Guarujá'};
 const SHEET_ID='1Ewu6Ipro4xAHokeBbhVc-cYfQik1PRGPrAMhtRZDu3U';
 const SHEET_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?gid=310676855#gid=310676855`;
-const ADMIN_API_URL='https://script.google.com/macros/s/AKfycbxAUoa3za8ncWJIrhXnJ8rDJZgR6FC5wxqiV94MujHNWOFepWCge_7YuQMCTliXe8gdpQ/exec';
+const ADMIN_API_URL='https://script.google.com/macros/s/AKfycbxyIvFdPP8r5T31aXM6csEZHrYDxrlAS_R4nuDIYhd1YSAwVTGzjP6p9nhVGcZ3qs2acw/exec';
 // Apps Script não expõe cabeçalhos CORS para chamadas autenticadas do GitHub Pages.
 // GET usa JSONP e POST usa uma requisição simples (sem preflight), mantendo a sessão Google.
 const nativeFetch=window.fetch.bind(window);
