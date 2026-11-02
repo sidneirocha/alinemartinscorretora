@@ -16,6 +16,10 @@ function doGet(e) {
     const action = (e && e.parameter && e.parameter.action) || 'list';
     if (action === 'public') return response_({ ok: true, properties: list_() }, e);
     const authorizedEmail = authorize_();
+    if (action === 'create') {
+      const property = JSON.parse((e && e.parameter && e.parameter.payload) || '{}');
+      return response_({ ok: true, email: authorizedEmail, property: create_(property) }, e);
+    }
     if (action === 'list') return response_({ ok: true, email: authorizedEmail, properties: list_() }, e);
     return response_({ ok: false, error: 'Ação GET inválida.' }, e);
   } catch (error) {
