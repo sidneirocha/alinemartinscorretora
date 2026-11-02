@@ -14,7 +14,7 @@ const DEFAULT_ADMIN_EMAILS = [
 ];
 const HEADERS = ['ID', 'Título', 'Operação', 'Preço (texto do site)', 'Endereço / localização exibida', 'Área', 'Quartos', 'Banheiros', 'Andares (campo do site)', 'Condomínio', 'IPTU', 'Características e resumo da descrição'];
 // Estrutura real da aba IMÓVEIS.
-const ALL_HEADERS = HEADERS.concat(['URL', 'Fotos', 'Status CMS', 'Destaque', 'Slug', 'Atualizado em', 'Cidade']);
+const ALL_HEADERS = HEADERS.concat(['URL', 'Fotos', 'Status CMS', 'Destaque', 'Slug', 'Atualizado em', 'Cidade', 'Ano construção']);
 
 function doGet(e) {
   try {
@@ -68,8 +68,11 @@ function sheet_() {
   if (sheet.getMaxColumns() < ALL_HEADERS.length) {
     sheet.insertColumnsAfter(sheet.getMaxColumns(), ALL_HEADERS.length - sheet.getMaxColumns());
   }
-  if (sheet.getRange(1, ALL_HEADERS.length).getDisplayValue() !== 'Cidade') {
-    sheet.getRange(1, ALL_HEADERS.length).setValue('Cidade');
+  if (sheet.getRange(1, ALL_HEADERS.length - 1).getDisplayValue() !== 'Cidade') {
+    sheet.getRange(1, ALL_HEADERS.length - 1).setValue('Cidade');
+  }
+  if (sheet.getRange(1, ALL_HEADERS.length).getDisplayValue() !== 'Ano construção') {
+    sheet.getRange(1, ALL_HEADERS.length).setValue('Ano construção');
   }
 
   return sheet;
@@ -136,6 +139,7 @@ function update_(property) {
         ? 'Publicado'
         : (property.Status || property['Status CMS'] || 'Publicado');
     }
+    if (header === 'Ano construção') return property[header] || 'Consultar';
     return property[header] || '';
   });
   sheet.getRange(row, 1, 1, ALL_HEADERS.length).setValues([values]);
@@ -153,6 +157,7 @@ function create_(property) {
   }
   sheet.appendRow(ALL_HEADERS.map(header => {
     if (header === 'Status CMS') return property.Status === 'Ativo' ? 'Publicado' : (property.Status || 'Publicado');
+    if (header === 'Ano construção') return property[header] || 'Consultar';
     return property[header] || '';
   }));
   return property;
