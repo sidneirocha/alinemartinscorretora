@@ -52,11 +52,12 @@ function doPost(e) {
 function authorize_() {
   const activeEmail = Session.getActiveUser().getEmail();
   const effectiveEmail = Session.getEffectiveUser().getEmail();
-  const email = String(activeEmail || effectiveEmail || '').trim().toLowerCase();
   const configured = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAILS') || '';
   const emails = [...new Set(DEFAULT_ADMIN_EMAILS.concat(configured.split(',')))].map(item => item.trim().toLowerCase()).filter(Boolean);
-  if (!email || !emails.includes(email)) throw new Error('Conta Google não autorizada.');
-  return email;
+  const candidates = [activeEmail, effectiveEmail].map(item => String(item || '').trim().toLowerCase()).filter(Boolean);
+  const authorizedEmail = candidates.find(email => emails.includes(email));
+  if (!authorizedEmail) throw new Error('Conta Google não autorizada.');
+  return authorizedEmail;
 }
 
 function sheet_() {
