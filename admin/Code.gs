@@ -39,9 +39,20 @@ function authPage_(e) {
   authorize_();
   const adminToken = issueAdminToken_(Session.getActiveUser().getEmail());
   const requested = String((e && e.parameter && e.parameter.return) || '');
-  const returnUrl = requested.startsWith('https://sidneirocha.github.io/alinemartinscorretora')
-    ? requested
-    : 'https://sidneirocha.github.io/alinemartinscorretora/admin';
+  const allowedOrigins = [
+    'https://corretoraalinemartins.com.br',
+    'https://www.corretoraalinemartins.com.br',
+    'https://sidneirocha.github.io'
+  ];
+  let returnUrl = 'https://corretoraalinemartins.com.br/admin';
+  try {
+    const parsed = new URL(requested);
+    const allowed = allowedOrigins.includes(parsed.origin) && (
+      parsed.origin !== 'https://sidneirocha.github.io' ||
+      parsed.pathname.startsWith('/alinemartinscorretora')
+    );
+    if (allowed) returnUrl = parsed.href;
+  } catch {}
   const destination = `${returnUrl}${returnUrl.includes('?') ? '&' : '?'}admin=1&adminAuth=1&adminToken=${encodeURIComponent(adminToken)}`;
   const safeDestination = destination.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
   return HtmlService.createHtmlOutput(`<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{margin:0;padding:24px;font:16px Arial,sans-serif;color:#191919;background:#f7f4ed}main{max-width:32rem;margin:20vh auto;text-align:center}a{display:inline-block;margin-top:18px;padding:14px 20px;border-radius:8px;background:#191919;color:#fff;text-decoration:none}</style></head><body><main><p>Autenticação concluída.</p><a href="${safeDestination}" target="_top">Continuar para o painel</a></main></body></html>`);

@@ -4,10 +4,10 @@
 
 ## Site
 
-- Página inicial: https://sidneirocha.github.io/alinemartinscorretora/
-- Lista de imóveis: https://sidneirocha.github.io/alinemartinscorretora/imoveis/
-- Sobre a corretora: https://sidneirocha.github.io/alinemartinscorretora/sobre/
-- Contato: https://sidneirocha.github.io/alinemartinscorretora/contato/
+- Página inicial: https://corretoraalinemartins.com.br/
+- Lista de imóveis: https://corretoraalinemartins.com.br/imoveis/
+- Sobre a corretora: https://corretoraalinemartins.com.br/sobre/
+- Contato: https://corretoraalinemartins.com.br/contato/
 
 ## Atendimento
 
@@ -21,4 +21,4 @@ O site apresenta apartamentos e casas para venda e locação, com informações 
 
 ## Catálogo
 
-- Sitemap: https://sidneirocha.github.io/alinemartinscorretora/sitemap.xml
+- Sitemap: https://corretoraalinemartins.com.br/sitemap.xml

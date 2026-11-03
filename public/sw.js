@@ -1,7 +1,7 @@
 const CACHE_NAME = 'aline-martins-shell-v3';
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.add('/alinemartinscorretora/')));
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.add('/')));
   self.skipWaiting();
 });
 

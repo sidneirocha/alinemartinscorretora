@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const site = 'https://sidneirocha.github.io/alinemartinscorretora';
+const site = 'https://corretoraalinemartins.com.br';
 const catalog = JSON.parse(readFileSync(new URL('../content/properties.json', import.meta.url), 'utf8'));
 const paths = ['/', '/imoveis/', '/sobre/', '/contato/', '/privacidade/'];
 for (const property of catalog.properties || []) {
