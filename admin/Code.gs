@@ -136,8 +136,15 @@ function issueAdminToken_(email) {
 }
 
 function sheet_() {
-  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
-  if (!sheet) throw new Error('A aba IMÓVEIS não foi encontrada.');
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const namedSheet = spreadsheet.getSheetByName(SHEET_NAME);
+  const sheet = namedSheet || spreadsheet.getSheets().find(candidate => {
+    if (candidate.getLastRow() < 1 || candidate.getLastColumn() < 2) return false;
+    const headers = candidate.getRange(1, 1, 1, candidate.getLastColumn()).getDisplayValues()[0]
+      .map(value => String(value).replace(/\s+/g, ' ').trim());
+    return headers.includes('ID') && headers.includes('Título');
+  });
+  if (!sheet) throw new Error('A aba de imóveis não foi encontrada. Verifique os cabeçalhos ID e Título.');
 
   // Mantém as colunas atuais e cria a nova coluna de cidade no fim da tabela.
   if (sheet.getMaxColumns() < ALL_HEADERS.length) {
@@ -155,7 +162,9 @@ function sheet_() {
 
 function list_() {
   const values = sheet_().getDataRange().getDisplayValues();
-  const properties = values.slice(1).filter(row => row[0]).map(rowToProperty_);
+  const headers = values[0].map(value => String(value).replace(/\s+/g, ' ').trim());
+  const idIndex = headers.indexOf('ID');
+  const properties = values.slice(1).filter(row => idIndex >= 0 && row[idIndex]).map(row => rowToProperty_(row, headers));
   const photoSheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(PHOTO_SHEET_NAME);
   const photosByProperty = {};
   if (photoSheet && photoSheet.getLastRow() >= 2) {
@@ -199,9 +208,10 @@ function photosFromSheetCell_(value) {
   }).filter(Boolean);
 }
 
-function rowToProperty_(row) {
-  const property = ALL_HEADERS.reduce((result, header, index) => {
-    result[header] = row[index] || '';
+function rowToProperty_(row, headers = ALL_HEADERS) {
+  const property = ALL_HEADERS.reduce((result, header) => {
+    const index = headers.indexOf(header);
+    result[header] = index >= 0 ? row[index] || '' : '';
     return result;
   }, {});
 
