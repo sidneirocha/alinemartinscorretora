@@ -11,8 +11,7 @@ const MESSAGE_SHEET_NAME = 'MENSAGENS';
 const MESSAGE_HEADERS = ['Recebida em', 'Nome', 'Telefone', 'E-mail', 'Objetivo', 'Mensagem', 'Status'];
 const DEFAULT_ADMIN_EMAILS = [
   'sidneisrbarros@gmail.com',
-  'limartins.corretora@gmail.com',
-  'alinemartinsframer@gmail.com'
+  'limartins.corretora@gmail.com'
 ];
 const HEADERS = ['ID', 'Título', 'Operação', 'Preço (texto do site)', 'Endereço / localização exibida', 'Área', 'Quartos', 'Banheiros', 'Andares (campo do site)', 'Condomínio', 'IPTU', 'Características e resumo da descrição'];
 // Estrutura real da aba IMÓVEIS.
