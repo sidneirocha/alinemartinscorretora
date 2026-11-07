@@ -130,9 +130,39 @@ function authorize_(adminToken) {
 }
 
 function issueAdminToken_(email) {
+  cleanupExpiredAdminTokens();
   const token = Utilities.getUuid();
   PropertiesService.getScriptProperties().setProperty(`admin-token-${token}`, JSON.stringify({ email: String(email || '').trim().toLowerCase(), expiresAt: Date.now() + 3600000 }));
   return token;
+}
+
+/** Remove tokens expirados ou corrompidos das propriedades do script. */
+function cleanupExpiredAdminTokens() {
+  const properties = PropertiesService.getScriptProperties();
+  const now = Date.now();
+  Object.entries(properties.getProperties()).forEach(([key, value]) => {
+    if (!key.startsWith('admin-token-')) return;
+    try {
+      const token = JSON.parse(value);
+      if (!token || !Number.isFinite(Number(token.expiresAt)) || Number(token.expiresAt) <= now) {
+        properties.deleteProperty(key);
+      }
+    } catch (error) {
+      properties.deleteProperty(key);
+    }
+  });
+}
+
+/** Execute uma vez no Apps Script para instalar a limpeza diária automática. */
+function installAdminTokenCleanupTrigger() {
+  ScriptApp.getProjectTriggers()
+    .filter(trigger => trigger.getHandlerFunction() === 'cleanupExpiredAdminTokens')
+    .forEach(trigger => ScriptApp.deleteTrigger(trigger));
+  ScriptApp.newTrigger('cleanupExpiredAdminTokens')
+    .timeBased()
+    .everyDays(1)
+    .atHour(3)
+    .create();
 }
 
 function sheet_() {

@@ -10,6 +10,7 @@ O arquivo `Code.gs` é o backend do painel e grava na aba `IMÓVEIS` da planilha
 5. Em `Implantar > Nova implantação`, escolha `Aplicativo da web`.
 6. Execute como sua conta e limite o acesso às contas autorizadas.
 7. Informe a URL `/exec` gerada para configurar `VITE_ADMIN_API_URL` no build do site.
+8. No editor do Apps Script, execute uma vez a função `installAdminTokenCleanupTrigger` e autorize o acesso solicitado. Ela instalará a limpeza diária dos tokens expirados.
 
 O backend usa a sessão da conta Google, valida o e-mail autorizado e oferece:
 
