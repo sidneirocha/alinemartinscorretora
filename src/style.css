@@ -17,8 +17,8 @@
 .header nav a{color:inherit;transition:color .2s ease,background .2s ease,border-color .2s ease}
 .header nav a:not(.whatsapp):hover{color:#b68d3d}
 .header .whatsapp{color:#191919;background:rgba(255,255,255,.88)}
-.header .login-link{border:1px solid #e6c980;border-radius:15px;padding:11px 17px;color:#fff;background:#191919}
-.header .login-link:hover{color:#191919;background:#e6c980;border-color:#e6c980}
+.header .login-link{padding:0;color:inherit;background:transparent;font-size:12px;opacity:.72}
+.header .login-link:hover{color:#d6b66c;background:transparent;opacity:1}
 .header .whatsapp:hover{color:#fff;background:#191919;border-color:#191919}
 .hero{background-image:linear-gradient(90deg,rgba(12,8,5,.72),transparent 62%),var(--hero-image)}
 .about-hero{background-image:linear-gradient(90deg,rgba(16,16,16,.94),rgba(16,16,16,.55)),var(--about-image)}
